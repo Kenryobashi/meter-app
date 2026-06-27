@@ -242,7 +242,7 @@ textarea.export-area {
 <div class="wrap">
 
   <header class="app-header">
-    <div class="app-title">車両メーター記録</div>
+    <div class="app-title">車両メーター記録：301に_5421</div>
     <button class="notif-btn" id="notifBtn" title="通知設定">🔔</button>
   </header>
 
@@ -437,7 +437,7 @@ function renderDayCards() {
       <div class="day-header">
         <span class="day-label ${labelClass}">${fmtLabel(ds)}</span>
         <div class="day-right">
-          ${dist !== null && dist >= 0 ? `<span class="day-dist num">${dist.toLocaleString()}km</span>` : ''}
+          ${entry ? (dist !== null && dist >= 0 ? `<span class="day-dist num">${dist.toLocaleString()}km</span>` : `<span class="day-dist" style="color:var(--text-dim)">― km</span>`) : ''}
           ${tagsPreview ? `<span class="day-tags-preview">${tagsPreview}</span>` : ''}
           ${entry ? '<span class="day-check">✓</span>' : ''}
           <span class="day-chevron">▼</span>
