@@ -1,0 +1,37 @@
+{
+  "name": "メーター記録",
+  "short_name": "メーター",
+  "description": "車両のメーター値を毎日記録するアプリ",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1b1e25",
+  "theme_color": "#242832",
+  "lang": "ja",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
