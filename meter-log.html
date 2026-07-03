@@ -453,7 +453,7 @@ function renderDayCards() {
       <div class="day-header">
         <span class="day-label ${labelClass}">${fmtLabel(ds)}</span>
         <div class="day-right">
-          ${entry ? (dist !== null && dist >= 0 ? `<span class="day-dist num">${dist.toLocaleString()}km</span>` : `<span class="day-dist" style="color:var(--text-dim)">― km</span>`) : ''}
+          ${entry ? `<span class="day-dist num">終 ${entry.meter.toLocaleString()}km</span>` : ''}
           ${tagsPreview ? `<span class="day-tags-preview">${tagsPreview}</span>` : ''}
           ${entry ? '<span class="day-check">✓</span>' : ''}
           <span class="day-chevron">▼</span>
