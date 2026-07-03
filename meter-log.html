@@ -240,18 +240,6 @@ textarea.memo-input:focus { outline: 1px solid var(--hairline); border-color: va
   text-align: center; margin-top: 7px; line-height: 1.5;
 }
 
-/* ── Export ── */
-.export-card {
-  margin-top: 18px; background: var(--panel);
-  border: 1px solid var(--hairline); border-radius: var(--radius); padding: 14px 16px;
-}
-.export-card h2 { font-size: 12px; color: var(--text-dim); font-weight: 600; letter-spacing: 0.06em; margin: 0 0 10px; }
-textarea.export-area {
-  width: 100%; min-height: 120px; background: var(--bezel); color: var(--text);
-  border: 1px solid var(--hairline); border-radius: 8px; padding: 10px;
-  font-size: 11.5px; line-height: 1.75; resize: vertical;
-  font-family: "SF Mono", "Roboto Mono", monospace;
-}
 
 /* ── Toast ── */
 .toast {
@@ -315,12 +303,6 @@ textarea.export-area {
     <div class="etc-note" id="etcNote"></div>
   </div>
 
-  <!-- 週報テキスト -->
-  <div class="export-card" id="exportCard" style="display:none;">
-    <h2>週報テキスト（コピー用）</h2>
-    <textarea class="export-area num" id="exportArea" readonly></textarea>
-    <button class="btn-secondary" id="copyBtn">コピーする</button>
-  </div>
 
 </div>
 <div class="toast" id="toast"></div>
@@ -552,22 +534,6 @@ function renderDayCards() {
   });
 }
 
-// ── Render: export ────────────────────────────────────────────
-function renderExport() {
-  const dates = getWeekDates(weekOffset);
-  const fmt = ds => { const d = new Date(ds+'T00:00:00'); return `${d.getMonth()+1}/${d.getDate()}(${WEEKDAYS[d.getDay()]})`; };
-  const lines = dates.map(ds => {
-    const entry = getEntry(ds);
-    if (!entry) return `${fmt(ds)}\t未記録`;
-    const prev = prevMeterBefore(ds);
-    const dist = prev !== null ? entry.meter - prev : null;
-    const tags = entry.tags?.join('・') || '';
-    const memo = entry.memo || '';
-    const note = [tags, memo].filter(Boolean).join('　');
-    return `${fmt(ds)}\t終${entry.meter.toLocaleString()}km\t${dist !== null ? dist.toLocaleString()+'km走行' : '―'}${note ? '\t'+note : ''}`;
-  });
-  document.getElementById('exportArea').value = lines.join('\n');
-}
 
 function renderEtcCard() {
   const dates = getWeekDates(weekOffset);
@@ -596,12 +562,10 @@ function renderAll() {
   const hasEntries = sortedDates().length > 0;
   document.getElementById('setupCard').style.display = hasEntries ? 'none' : 'block';
   document.getElementById('weekNav').style.display = hasEntries ? 'flex' : 'none';
-  document.getElementById('exportCard').style.display = hasEntries ? 'block' : 'none';
   if (!hasEntries) return;
   renderWeekNav();
   renderDayCards();
   renderEtcCard();
-  renderExport();
 }
 
 // ── Setup ─────────────────────────────────────────────────────
@@ -616,13 +580,6 @@ document.getElementById('setupSaveBtn').addEventListener('click', () => {
 document.getElementById('prevWeekBtn').addEventListener('click', () => { weekOffset--; renderAll(); });
 document.getElementById('nextWeekBtn').addEventListener('click', () => { if (weekOffset < 0) { weekOffset++; renderAll(); } });
 document.getElementById('todayWeekBtn').addEventListener('click', () => { weekOffset = 0; renderAll(); });
-
-// ── Copy ──────────────────────────────────────────────────────
-document.getElementById('copyBtn').addEventListener('click', async () => {
-  const text = document.getElementById('exportArea').value;
-  try { await navigator.clipboard.writeText(text); showToast('コピーしました'); }
-  catch { showToast('コピーできませんでした'); }
-});
 
 // ── Notifications ─────────────────────────────────────────────
 async function checkNotifState() {
