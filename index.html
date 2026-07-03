@@ -50,7 +50,13 @@ button { font-family: inherit; border: none; cursor: pointer; }
   display: flex; align-items: center; justify-content: space-between;
   margin-bottom: 14px;
 }
-.app-title { font-size: 11px; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; }
+.app-title { font-size: 11px; color: var(--text-dim); letter-spacing: 0.06em; cursor: pointer; user-select: none; }
+.vehicle-input {
+  width: 100%; background: var(--bezel); border: 1px solid var(--hairline);
+  border-radius: 8px; color: var(--text); font-family: inherit; font-size: 16px;
+  padding: 11px 14px; outline: none; margin-top: 4px;
+}
+.vehicle-input::placeholder { color: var(--text-dim); opacity: 0.5; }
 .notif-btn {
   background: var(--panel-raised);
   border: 1px solid var(--hairline);
@@ -255,9 +261,18 @@ textarea.memo-input:focus { outline: 1px solid var(--hairline); border-color: va
 <div class="wrap">
 
   <header class="app-header">
-    <div class="app-title">車両メーター記録：301に_5421</div>
+    <div class="app-title" id="appTitle">車両メーター記録</div>
     <button class="notif-btn" id="notifBtn" title="通知設定">🔔</button>
   </header>
+
+  <!-- 車両番号設定（初回のみ） -->
+  <div class="setup-card" id="vehicleCard" style="display:none;">
+    <h2>🚗 あなたの車両番号を入力してください</h2>
+    <input type="text" id="vehicleInput" class="vehicle-input"
+      placeholder="例：301に_5421　横浜300さ_1234" maxlength="20">
+    <button class="btn-primary" id="vehicleSaveBtn" style="margin-top:12px;">保存して始める</button>
+    <div class="setup-note">ホーム画面に表示されます。後から変更したい場合はタイトルを長押ししてください。</div>
+  </div>
 
   <!-- 通知許可バナー -->
   <div class="banner banner-notif" id="notifBanner">
@@ -309,6 +324,7 @@ textarea.memo-input:focus { outline: 1px solid var(--hairline); border-color: va
 
 <script>
 const STORAGE_KEY = 'vehicle-meter-log';
+const VEHICLE_KEY = 'vehicle-id';
 const NOTIF_DISMISSED_KEY = 'notif-banner-dismissed';
 const WEEKDAYS = ['日','月','火','水','木','金','土'];
 const TAGS = ['遠方','高速','会食','駐車場','燃料','洗車'];
@@ -671,13 +687,75 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(() => {});
 }
 
+// ── Vehicle ID ────────────────────────────────────────────────
+function loadVehicleId() {
+  const id = localStorage.getItem(VEHICLE_KEY);
+  const titleEl = document.getElementById('appTitle');
+  const vehicleCard = document.getElementById('vehicleCard');
+
+  if (id) {
+    titleEl.textContent = `車両メーター記録：${id}`;
+    vehicleCard.style.display = 'none';
+    return true; // 設定済み
+  } else {
+    titleEl.textContent = '車両メーター記録';
+    vehicleCard.style.display = 'block';
+    return false; // 未設定
+  }
+}
+
+function saveVehicleId(id) {
+  localStorage.setItem(VEHICLE_KEY, id);
+  document.getElementById('appTitle').textContent = `車両メーター記録：${id}`;
+  document.getElementById('vehicleCard').style.display = 'none';
+}
+
+document.getElementById('vehicleSaveBtn').addEventListener('click', () => {
+  const val = document.getElementById('vehicleInput').value.trim();
+  if (!val) { showToast('車両番号を入力してください'); return; }
+  saveVehicleId(val);
+  showToast('車両番号を保存しました');
+  renderAll();
+});
+
+// タイトル長押しで車両番号を変更
+document.getElementById('appTitle').addEventListener('contextmenu', e => {
+  e.preventDefault();
+  editVehicleId();
+});
+let titlePressTimer;
+document.getElementById('appTitle').addEventListener('touchstart', () => {
+  titlePressTimer = setTimeout(editVehicleId, 600);
+});
+document.getElementById('appTitle').addEventListener('touchend', () => clearTimeout(titlePressTimer));
+
+function editVehicleId() {
+  const current = localStorage.getItem(VEHICLE_KEY) || '';
+  const next = prompt('車両番号を変更してください', current);
+  if (next === null) return;
+  const val = next.trim();
+  if (!val) { showToast('車両番号を入力してください'); return; }
+  saveVehicleId(val);
+  showToast('車両番号を変更しました');
+}
+
 // ── Init ──────────────────────────────────────────────────────
 (function init() {
+  const hasVehicle = loadVehicleId();
   loadState();
-  renderAll();
-  checkNotifState();
-  checkOnOpen();
-  syncIDB();
+  if (hasVehicle) {
+    renderAll();
+    checkNotifState();
+    checkOnOpen();
+    syncIDB();
+  }
+  // 車両番号設定後にメーター初期設定へ進む
+  document.getElementById('vehicleSaveBtn').addEventListener('click', () => {
+    renderAll();
+    checkNotifState();
+    checkOnOpen();
+    syncIDB();
+  }, { once: true });
 })();
 </script>
 </body>
