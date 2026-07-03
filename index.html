@@ -117,30 +117,28 @@ button { font-family: inherit; border: none; cursor: pointer; }
 .day-card.today-card { border-color: rgba(255,180,84,0.4); }
 
 .day-header {
-  display: flex; align-items: center;
+  display: grid;
+  grid-template-columns: 90px 80px 1fr 20px 16px;
+  align-items: center;
+  column-gap: 6px;
   padding: 11px 14px; cursor: pointer; user-select: none;
   -webkit-tap-highlight-color: transparent;
-  gap: 0;
 }
-.day-label { font-size: 14px; font-weight: 600; flex-shrink: 0; }
+.day-label { font-size: 14px; font-weight: 600; }
 .day-label.is-today  { color: var(--amber); }
 .day-label.is-future { color: var(--text-dim); }
 .day-dist {
   font-size: 13px; color: var(--mint); font-weight: 600;
   font-family: "SF Mono", "Roboto Mono", ui-monospace, monospace;
   font-variant-numeric: tabular-nums;
-  min-width: 88px;        /* 数字の列を揃える固定幅 */
-  text-align: right;
-  margin-left: 10px;
-  flex-shrink: 0;
+  text-align: left;
 }
 .day-tags-preview {
   font-size: 11px; color: var(--text-dim);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  flex: 1; margin-left: 8px;
 }
-.day-check { color: var(--mint); font-size: 15px; margin-left: 6px; flex-shrink: 0; }
-.day-chevron { color: var(--text-dim); font-size: 11px; transition: transform 0.2s; margin-left: 6px; flex-shrink: 0; }
+.day-check { color: var(--mint); font-size: 14px; text-align: center; }
+.day-chevron { color: var(--text-dim); font-size: 11px; transition: transform 0.2s; text-align: right; }
 .day-card.open .day-chevron { transform: rotate(180deg); }
 
 .day-body { display: none; padding: 2px 14px 14px; border-top: 1px solid var(--hairline); }
