@@ -1,6 +1,5 @@
-const CACHE_NAME = 'meter-log-v4';
+const CACHE_NAME = 'meter-log-v5';
 const ASSETS = [
-  './index.html',
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
@@ -23,22 +22,46 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// ── Fetch (cache-first) ───────────────────────────────────────
+// ── Fetch ─────────────────────────────────────────────────────
+// HTML はネットワーク優先（常に最新を取得、失敗時のみキャッシュ）
+// アイコン等の静的ファイルはキャッシュ優先
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
-  event.respondWith(
-    caches.match(event.request).then(cached => {
-      if (cached) return cached;
-      return fetch(event.request).then(response => {
-        if (response.ok) {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-        }
-        return response;
-      });
-    })
-  );
+
+  const isHTML = event.request.destination === 'document' ||
+                 url.pathname.endsWith('.html') ||
+                 url.pathname === '/' ||
+                 url.pathname.endsWith('/meter-app/');
+
+  if (isHTML) {
+    // ネットワーク優先：更新を即反映、オフライン時はキャッシュにフォールバック
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request))
+    );
+  } else {
+    // キャッシュ優先：アイコン・マニフェスト等
+    event.respondWith(
+      caches.match(event.request).then(cached => {
+        if (cached) return cached;
+        return fetch(event.request).then(response => {
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+          }
+          return response;
+        });
+      })
+    );
+  }
 });
 
 // ── IndexedDB helper（アプリ側と同じ DB を読む） ──────────────
@@ -70,10 +93,9 @@ self.addEventListener('periodicsync', event => {
 
 async function handleWeeklyCheck() {
   const now = new Date();
-  const day  = now.getDay();   // 0=日, 1=月
+  const day  = now.getDay();
   const hour = now.getHours();
 
-  // 日曜 20時以降：未記録リマインド
   if (day === 0 && hour >= 20) {
     const missingRec = await idbGet('missing-days');
     const missing = missingRec?.value ?? 0;
@@ -88,11 +110,9 @@ async function handleWeeklyCheck() {
     }
   }
 
-  // 月曜 8〜10時：先週のサマリー通知
   if (day === 1 && hour >= 8 && hour < 10) {
     const summaryRec = await idbGet('weekly-summary');
     if (summaryRec?.text) {
-      // 同じ週に何度も送らないよう IDB にフラグ保存
       const sentKey = `monday-sent-${summaryRec.week}`;
       const alreadySent = await idbGet(sentKey);
       if (!alreadySent) {
@@ -103,7 +123,6 @@ async function handleWeeklyCheck() {
           tag: 'monday-summary',
           requireInteraction: true,
         });
-        // 送信済みフラグを書き込む
         const req = indexedDB.open('meter-notif-db', 1);
         req.onsuccess = e => {
           const tx = e.target.result.transaction('kv','readwrite');
