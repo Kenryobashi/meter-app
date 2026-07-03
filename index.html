@@ -117,18 +117,30 @@ button { font-family: inherit; border: none; cursor: pointer; }
 .day-card.today-card { border-color: rgba(255,180,84,0.4); }
 
 .day-header {
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center;
   padding: 11px 14px; cursor: pointer; user-select: none;
   -webkit-tap-highlight-color: transparent;
+  gap: 0;
 }
-.day-label { font-size: 14px; font-weight: 600; }
+.day-label { font-size: 14px; font-weight: 600; flex-shrink: 0; }
 .day-label.is-today  { color: var(--amber); }
 .day-label.is-future { color: var(--text-dim); }
-.day-right { display: flex; align-items: center; gap: 8px; }
-.day-dist { font-size: 12.5px; color: var(--mint); font-weight: 600; }
-.day-tags-preview { font-size: 11px; color: var(--text-dim); max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.day-check { color: var(--mint); font-size: 15px; }
-.day-chevron { color: var(--text-dim); font-size: 11px; transition: transform 0.2s; }
+.day-dist {
+  font-size: 13px; color: var(--mint); font-weight: 600;
+  font-family: "SF Mono", "Roboto Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  min-width: 88px;        /* 数字の列を揃える固定幅 */
+  text-align: right;
+  margin-left: 10px;
+  flex-shrink: 0;
+}
+.day-tags-preview {
+  font-size: 11px; color: var(--text-dim);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  flex: 1; margin-left: 8px;
+}
+.day-check { color: var(--mint); font-size: 15px; margin-left: 6px; flex-shrink: 0; }
+.day-chevron { color: var(--text-dim); font-size: 11px; transition: transform 0.2s; margin-left: 6px; flex-shrink: 0; }
 .day-card.open .day-chevron { transform: rotate(180deg); }
 
 .day-body { display: none; padding: 2px 14px 14px; border-top: 1px solid var(--hairline); }
@@ -468,12 +480,10 @@ function renderDayCards() {
     card.innerHTML = `
       <div class="day-header">
         <span class="day-label ${labelClass}">${fmtLabel(ds)}</span>
-        <div class="day-right">
-          ${entry ? `<span class="day-dist num">${entry.meter.toLocaleString()}km</span>` : ''}
-          ${tagsPreview ? `<span class="day-tags-preview">${tagsPreview}</span>` : ''}
-          ${entry ? '<span class="day-check">✓</span>' : ''}
-          <span class="day-chevron">▼</span>
-        </div>
+        ${entry ? `<span class="day-dist">${entry.meter.toLocaleString()}km</span>` : '<span class="day-dist" style="color:transparent">―</span>'}
+        <span class="day-tags-preview">${tagsPreview}</span>
+        ${entry ? '<span class="day-check">✓</span>' : '<span style="width:21px;flex-shrink:0"></span>'}
+        <span class="day-chevron">▼</span>
       </div>
       <div class="day-body">
         <div class="fld-label">前日終わりメーター</div>
