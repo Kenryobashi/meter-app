@@ -215,6 +215,31 @@ textarea.memo-input:focus { outline: 1px solid var(--hairline); border-color: va
 }
 .odo-display input::placeholder { color: #5a5142; opacity: 0.7; }
 
+/* ── ETC card ── */
+.etc-card {
+  margin-top: 10px;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.btn-etc {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px;
+  width: 100%; padding: 14px;
+  background: #1a3a2a;
+  border: 1px solid rgba(111,211,160,0.35);
+  border-radius: var(--radius);
+  color: var(--mint);
+  font-size: 15px; font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-etc:active { background: #122a1f; }
+.etc-note {
+  font-size: 11.5px; color: var(--text-dim);
+  text-align: center; margin-top: 7px; line-height: 1.5;
+}
+
 /* ── Export ── */
 .export-card {
   margin-top: 18px; background: var(--panel);
@@ -280,6 +305,15 @@ textarea.export-area {
 
   <!-- 日ごとのカード -->
   <div id="dayCards"></div>
+
+  <!-- ETC照会ボタン -->
+  <div class="etc-card" id="etcCard" style="display:none;">
+    <a id="etcLink" href="https://www2.etc-meisai.jp/etc/R?funccode=1013000000&nextfunc=1013000000"
+       target="_blank" rel="noopener" class="btn-etc">
+      🛣 ETC利用照会サイトを開く
+    </a>
+    <div class="etc-note" id="etcNote"></div>
+  </div>
 
   <!-- 週報テキスト -->
   <div class="export-card" id="exportCard" style="display:none;">
@@ -535,6 +569,29 @@ function renderExport() {
   document.getElementById('exportArea').value = lines.join('\n');
 }
 
+function renderEtcCard() {
+  const dates = getWeekDates(weekOffset);
+  const etcCard = document.getElementById('etcCard');
+  const etcNote = document.getElementById('etcNote');
+
+  // この週に「高速」タグがある日を抽出
+  const highwayDays = dates.filter(ds => getEntry(ds)?.tags?.includes('高速'));
+
+  if (highwayDays.length === 0) {
+    etcCard.style.display = 'none';
+    return;
+  }
+
+  // 週の開始・終了を YYYY/MM/DD 形式で表示（ETC検索欄に貼れる形式）
+  const fmt = ds => ds.replace(/-/g, '/');
+  const weekStart = fmt(dates[0]);
+  const weekEnd   = fmt(dates[6]);
+  const dayList   = highwayDays.map(ds => fmtLabel(ds)).join('・');
+
+  etcNote.textContent = `高速利用日：${dayList}　／　検索期間：${weekStart} 〜 ${weekEnd}`;
+  etcCard.style.display = 'block';
+}
+
 function renderAll() {
   const hasEntries = sortedDates().length > 0;
   document.getElementById('setupCard').style.display = hasEntries ? 'none' : 'block';
@@ -543,6 +600,7 @@ function renderAll() {
   if (!hasEntries) return;
   renderWeekNav();
   renderDayCards();
+  renderEtcCard();
   renderExport();
 }
 
