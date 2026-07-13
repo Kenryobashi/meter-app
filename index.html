@@ -118,7 +118,7 @@ button { font-family: inherit; border: none; cursor: pointer; }
 
 .day-header {
   display: grid;
-  grid-template-columns: 112px 80px 1fr 20px 16px;
+  grid-template-columns: 112px 80px 52px 1fr 20px 16px;
   align-items: center;
   column-gap: 6px;
   padding: 11px 14px; cursor: pointer; user-select: none;
@@ -129,6 +129,12 @@ button { font-family: inherit; border: none; cursor: pointer; }
 .day-label.is-future { color: var(--text-dim); }
 .day-dist {
   font-size: 13px; color: var(--mint); font-weight: 600;
+  font-family: "SF Mono", "Roboto Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+}
+.day-time {
+  font-size: 11px; color: var(--text-dim); font-weight: 500;
   font-family: "SF Mono", "Roboto Mono", ui-monospace, monospace;
   font-variant-numeric: tabular-nums;
   text-align: left;
@@ -354,7 +360,7 @@ function fmtLabel(ds) {
 function getEntry(ds) {
   const e = state.entries[ds];
   if (!e) return null;
-  if (typeof e === 'number') return { meter: e, tags: [], memo: '' }; // 旧形式互換
+  if (typeof e === 'number') return { meter: e, tags: [], memo: '', time: '' }; // 旧形式互換
   return e;
 }
 function getMeter(ds) { return getEntry(ds)?.meter ?? null; }
@@ -479,6 +485,7 @@ function renderDayCards() {
       <div class="day-header">
         <span class="day-label ${labelClass}">${fmtLabel(ds)}</span>
         ${entry ? `<span class="day-dist">${entry.meter.toLocaleString()}km</span>` : '<span class="day-dist" style="color:transparent">―</span>'}
+        <span class="day-time">${entry?.time || ''}</span>
         <span class="day-tags-preview">${tagsPreview}</span>
         ${entry ? '<span class="day-check">✓</span>' : '<span style="width:21px;flex-shrink:0"></span>'}
         <span class="day-chevron">▼</span>
@@ -501,6 +508,13 @@ function renderDayCards() {
           <span class="t-val ${dist === null ? 'zero' : dist < 0 ? 'warn' : ''} num" data-trip>
             ${dist === null ? '― km' : dist < 0 ? '前日より小さい値です' : dist.toLocaleString() + ' km'}
           </span>
+        </div>
+
+        <div class="fld-label">乗り終わり時刻（保存時に自動記録／手動修正可）</div>
+        <div class="meter-input-wrap">
+          <input type="time" class="time-input num"
+            value="${entry?.time || ''}"
+            ${isFuture ? 'disabled' : ''}>
         </div>
 
         <div class="fld-label">メモタグ（複数選択可）</div>
@@ -545,7 +559,10 @@ function renderDayCards() {
       if (isNaN(meterVal)) { showToast('メーター値を入力してください'); return; }
       const tags = [...card.querySelectorAll('.tag-pill.active')].map(p => p.dataset.tag);
       const memo = card.querySelector('.memo-input').value.trim();
-      state.entries[ds] = { meter: meterVal, tags, memo };
+      const timeInput = card.querySelector('.time-input').value;
+      const nowHHMM = new Date().toTimeString().slice(0,5);
+      const time = timeInput || nowHHMM; // 未入力なら保存した瞬間の時刻を自動記録
+      state.entries[ds] = { meter: meterVal, tags, memo, time };
       saveState();
       const btn = card.querySelector('.day-save-btn');
       btn.classList.add('save-pulse');
@@ -596,7 +613,7 @@ function renderAll() {
 document.getElementById('setupSaveBtn').addEventListener('click', () => {
   const val = parseFloat(document.getElementById('setupInput').value);
   if (isNaN(val)) { showToast('数値を入力してください'); return; }
-  state.entries[todayStr()] = { meter: val, tags: [], memo: '' };
+  state.entries[todayStr()] = { meter: val, tags: [], memo: '', time: new Date().toTimeString().slice(0,5) };
   saveState(); showToast('開始しました！'); renderAll();
 });
 
