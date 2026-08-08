@@ -144,6 +144,10 @@ button { font-family: inherit; border: none; cursor: pointer; }
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .day-check { color: var(--mint); font-size: 14px; text-align: center; }
+.pending-check { color: #f0a020; }
+.pending-dist { color: #f0a020; font-size: 11px; font-weight: 600; }
+.btn-pending { background: #f0a020 !important; }
+.save-hint { margin-top: 6px; font-size: 11px; color: var(--text-dim); line-height: 1.5; }
 .day-chevron { color: var(--text-dim); font-size: 11px; transition: transform 0.2s; text-align: right; }
 .day-card.open .day-chevron { transform: rotate(180deg); }
 
@@ -546,10 +550,19 @@ function getWeekDates(offset) {
 
 function sortedDates() { return Object.keys(state.entries).sort(); }
 
+// 直近の「メーターが入っている日」の値（一時保存＝メーター未入力の日は飛ばす）
 function prevMeterBefore(ds) {
-  const dates = sortedDates().filter(d => d < ds);
+  const dates = sortedDates().filter(d => d < ds && getMeter(d) !== null);
   if (!dates.length) return null;
   return getMeter(dates[dates.length - 1]);
+}
+// メーター未入力（＝一時保存）かどうか
+function isPending(entry) { return !!entry && (entry.meter === null || entry.meter === undefined); }
+// 費用・タグ・メモのいずれかが入っているか
+function hasSideData(entry) {
+  if (!entry) return false;
+  if (entry.tags?.length || (entry.memo || '').trim()) return true;
+  return COST_KEYS.some(c => entry[c.key] !== null && entry[c.key] !== undefined);
 }
 
 // ── Persistence ───────────────────────────────────────────────
@@ -592,14 +605,16 @@ async function syncIDB() {
     const lines = weekDates.map(ds => {
       const entry = getEntry(ds); if (!entry) return null;
       const prev = prevMeterBefore(ds);
-      const dist = prev !== null ? entry.meter - prev : null;
+      const dist = (prev !== null && !isPending(entry)) ? entry.meter - prev : null;
       const tags = entry.tags?.join('・') || '';
       const memo = entry.memo || '';
       const note = [tags, memo].filter(Boolean).join(' ');
-      return `${fmtLabel(ds)} 終${entry.meter.toLocaleString()}km${dist!==null?' '+dist.toLocaleString()+'km走行':''}${note?' '+note:''}`;
+      const head = isPending(entry) ? '一時保存（メーター未入力）' : `終${entry.meter.toLocaleString()}km`;
+      return `${fmtLabel(ds)} ${head}${dist!==null?' '+dist.toLocaleString()+'km走行':''}${note?' '+note:''}`;
     }).filter(Boolean);
 
-    const missing = weekDates.filter(ds => ds <= today && !getEntry(ds)).length;
+    // メーターが入っていない日（未記録・一時保存）を未入力としてカウント
+    const missing = weekDates.filter(ds => ds <= today && getMeter(ds) === null).length;
 
     const tx = db.transaction('kv','readwrite');
     const st = tx.objectStore('kv');
@@ -636,7 +651,8 @@ function renderDayCards() {
   dates.forEach(ds => {
     const entry = getEntry(ds);
     const prevMeter = prevMeterBefore(ds);
-    const dist = (entry && prevMeter !== null) ? entry.meter - prevMeter : null;
+    const pending = isPending(entry);
+    const dist = (entry && !pending && prevMeter !== null) ? entry.meter - prevMeter : null;
     const isToday = ds === today;
     const isFuture = ds > today;
 
@@ -650,10 +666,15 @@ function renderDayCards() {
     card.innerHTML = `
       <div class="day-header">
         <span class="day-label ${labelClass}">${fmtLabel(ds)}</span>
-        ${entry ? `<span class="day-dist">${entry.meter.toLocaleString()}km</span>` : '<span class="day-dist" style="color:transparent">―</span>'}
-        <span class="day-time">${entry?.time || ''}</span>
+        ${entry && !pending
+            ? `<span class="day-dist">${entry.meter.toLocaleString()}km</span>`
+            : pending
+              ? '<span class="day-dist pending-dist">一時保存</span>'
+              : '<span class="day-dist" style="color:transparent">―</span>'}
+        <span class="day-time">${(entry && !pending) ? (entry.time || '') : ''}</span>
         <span class="day-tags-preview">${tagsPreview}</span>
-        ${entry ? '<span class="day-check">✓</span>' : '<span style="width:21px;flex-shrink:0"></span>'}
+        ${entry ? (pending ? '<span class="day-check pending-check">…</span>' : '<span class="day-check">✓</span>')
+                : '<span style="width:21px;flex-shrink:0"></span>'}
         <span class="day-chevron">▼</span>
       </div>
       <div class="day-body">
@@ -664,7 +685,7 @@ function renderDayCards() {
         <div class="meter-input-wrap">
           <input type="number" inputmode="numeric" class="meter-val-input num"
             placeholder="${isFuture ? '―' : '000000'}"
-            value="${entry ? entry.meter : ''}"
+            value="${(entry && !pending) ? entry.meter : ''}"
             ${isFuture ? 'disabled' : ''}>
           <span class="meter-unit">km</span>
         </div>
@@ -702,7 +723,10 @@ function renderDayCards() {
         <textarea class="memo-input" rows="2"
           placeholder="例：〇〇への出張・特記事項">${entry?.memo || ''}</textarea>
 
-        <button class="btn-primary day-save-btn" ${isFuture ? 'disabled' : ''}>保存する</button>
+        <button class="btn-primary day-save-btn" ${isFuture ? 'disabled' : ''}>${
+          (entry && !pending) || !entry ? '保存する' : '一時保存する'
+        }</button>
+        <div class="save-hint" data-hint>${pending ? '費用のみ記録中。帰社後にメーターを入れると確定します。' : ''}</div>
       </div>
     `;
 
@@ -712,7 +736,19 @@ function renderDayCards() {
     // リアルタイム走行距離
     const meterInput = card.querySelector('.meter-val-input');
     const tripEl = card.querySelector('[data-trip]');
+    const saveBtn = card.querySelector('.day-save-btn');
+    const hintEl = card.querySelector('[data-hint]');
+    function refreshSaveLabel() {
+      const empty = meterInput.value.trim() === '';
+      saveBtn.textContent = empty ? '一時保存する' : '保存する';
+      saveBtn.classList.toggle('btn-pending', empty);
+      hintEl.textContent = empty
+        ? 'メーター未入力でも、費用やタグだけ先に保存できます。'
+        : (pending ? 'メーターを入れて保存すると確定します。' : '');
+    }
+    refreshSaveLabel();
     meterInput.addEventListener('input', () => {
+      refreshSaveLabel();
       const val = parseFloat(meterInput.value);
       if (isNaN(val) || prevMeter === null) {
         tripEl.textContent = '― km'; tripEl.className = 't-val zero num'; return;
@@ -769,8 +805,7 @@ function renderDayCards() {
 
     // 保存
     card.querySelector('.day-save-btn').addEventListener('click', () => {
-      const meterVal = parseFloat(meterInput.value);
-      if (isNaN(meterVal)) { showToast('メーター値を入力してください'); return; }
+      const meterVal = num(meterInput.value);
       const tags = [...card.querySelectorAll('.tag-pill.active')].map(p => p.dataset.tag);
       const memo = card.querySelector('.memo-input').value.trim();
       const timeInput = card.querySelector('.time-input').value;
@@ -785,12 +820,21 @@ function renderDayCards() {
         const v = i.value.trim();
         if (v !== '') rec[k] = (k === 'dest') ? v : num(v);
       });
+
+      // メーター未入力でも、タグ・費用・メモがあれば「一時保存」として残す
+      if (meterVal === null && !hasSideData(rec)) {
+        showToast('メーター値、または費用・タグを入力してください');
+        return;
+      }
+
       state.entries[ds] = rec;
       saveState();
       const btn = card.querySelector('.day-save-btn');
       btn.classList.add('save-pulse');
       setTimeout(() => btn.classList.remove('save-pulse'), 400);
-      showToast(`${fmtLabel(ds)} を保存しました`);
+      showToast(meterVal === null
+        ? `${fmtLabel(ds)} を一時保存しました（メーターは後で）`
+        : `${fmtLabel(ds)} を保存しました`);
       renderAll();
     });
 

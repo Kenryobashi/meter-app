@@ -28,6 +28,7 @@
   td.dest { text-align: left; }
   .num { text-align: right; font-variant-numeric: tabular-nums; }
   tr.blank td { background: #fafafa; color: #bbb; }
+  tr.pending td { background: #fff8e6; }
   tr.total td { background: #eef1f5; font-weight: 700; }
   .warn { color: #c62828; font-weight: 600; }
   .summary { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
@@ -82,15 +83,23 @@ function render(p) {
   let fuelL = 0, workDays = 0, dist = 0, lastMeter = p.prevMeter ?? null;
   const missing = new Set();
 
+  let pendingDays = 0;
   const rows = p.days.map(d => {
-    if (d.e === undefined || d.e === null) {
+    const hasMeter = d.e !== undefined && d.e !== null;
+    const hasCost = COST_KEYS.some(c => d[c.key] !== null && d[c.key] !== undefined)
+                    || (d.tags && d.tags.length) || d.fuelL;
+    if (!hasMeter && !hasCost) {
       return `<tr class="blank"><td>${mdOf(d.d)}(${wdOf(d.d)})</td>
         <td colspan="${4 + COST_KEYS.length + 2}">―</td></tr>`;
     }
-    workDays++;
+    if (hasMeter) {
+      workDays++;
+      lastMeter = d.e;
+    } else {
+      pendingDays++;
+    }
     const start = (d.s === null || d.s === undefined) ? null : d.s;
-    if (start !== null) dist += (d.e - start);
-    lastMeter = d.e;
+    if (hasMeter && start !== null) dist += (d.e - start);
     if (d.fuelL) fuelL += Number(d.fuelL);
 
     const tags = d.tags || [];
@@ -104,11 +113,11 @@ function render(p) {
       return `<td class="num">${yen(v)}</td>`;
     }).join('');
 
-    return `<tr>
+    return `<tr${hasMeter ? '' : ' class="pending"'}>
       <td>${mdOf(d.d)}(${wdOf(d.d)})</td>
       <td class="dest">${esc(d.dest)}</td>
-      <td class="num">${start === null ? '' : yen(start)}</td>
-      <td class="num">${yen(d.e)}</td>
+      <td class="num">${(hasMeter && start !== null) ? yen(start) : ''}</td>
+      <td class="num">${hasMeter ? yen(d.e) : '<span class="warn">⚠メーター未入力</span>'}</td>
       <td class="num">${d.fuelL ? d.fuelL : ''}</td>
       ${cells}
       <td>${esc(d.st)}</td>
@@ -125,6 +134,7 @@ function render(p) {
   </tr>`;
 
   const notes = [];
+  if (pendingDays) notes.push(`※ メーター未入力（一時保存）の日が ${pendingDays} 日あります。アプリで指針値を入力すると走行距離・稼働日数に反映されます`);
   if (missing.size) notes.push(`※ ${[...missing].join('・')} に未入力があります（伝票合計は実額と異なる可能性があります）`);
 
   document.getElementById('root').innerHTML = `
