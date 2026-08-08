@@ -1,4 +1,4 @@
-const CACHE_NAME = 'meter-log-v9';
+const CACHE_NAME = 'meter-log-v10';
 const ASSETS = [
   './manifest.json',
   './icons/icon-192.png',
@@ -91,12 +91,25 @@ self.addEventListener('periodicsync', event => {
   }
 });
 
+// その週の月曜日（日曜は6日前が週初め＝アプリ側と同じ数え方）
+function weekStartOf(d) {
+  const dow = d.getDay();
+  const m = new Date(d);
+  m.setDate(d.getDate() - (dow === 0 ? 6 : dow - 1));
+  const p = n => String(n).padStart(2, '0');
+  return `${m.getFullYear()}-${p(m.getMonth()+1)}-${p(m.getDate())}`;
+}
+
 async function handleWeeklyCheck() {
   const now = new Date();
   const day  = now.getDay();
   const hour = now.getHours();
 
   if (day === 0 && hour >= 20) {
+    // すでに提出済みの週なら通知しない
+    const sent = await idbGet('report-sent');
+    if (sent?.value && sent.week === weekStartOf(now)) return;
+
     const missingRec = await idbGet('missing-days');
     const missing = missingRec?.value ?? 0;
     if (missing > 0) {

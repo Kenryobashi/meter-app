@@ -172,7 +172,7 @@ function render(p) {
     <div class="notes">${notes.map(n => `<p>${esc(n)}</p>`).join('')}</div>
   </div>
   <div class="actions">
-    <button onclick="window.print()">🖨 印刷 / PDF保存</button>
+    <button onclick="markSent('${p.from}'); window.print();">🖨 印刷 / PDF保存</button>
     <a class="sub" id="mailLink" href="#">✉️ このレポートをメールで送る</a>
     <a class="sub" href="./index.html">← アプリに戻る</a>
   </div>`;
@@ -187,8 +187,29 @@ function render(p) {
     '▼ 表形式で開く（PCのブラウザで開いてください）',
     location.href,
   ].join('\n');
-  document.getElementById('mailLink').href =
+  const mailLink = document.getElementById('mailLink');
+  mailLink.href =
     `mailto:${p.email || ''}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  // メール送信に進んだ時点で「提出済み」として記録し、日曜の通知を抑止する
+  mailLink.addEventListener('click', () => markSent(p.from));
+}
+
+// localStorage と IndexedDB（SW が読む）の両方へ提出済みを記録
+function markSent(weekStart) {
+  try { localStorage.setItem(`report-sent-${weekStart}`, '1'); } catch {}
+  try {
+    const req = indexedDB.open('meter-notif-db', 1);
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('kv')) db.createObjectStore('kv', {keyPath:'k'});
+    };
+    req.onsuccess = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('kv')) return;
+      const tx = db.transaction('kv', 'readwrite');
+      tx.objectStore('kv').put({k: 'report-sent', week: weekStart, value: true});
+    };
+  } catch {}
 }
 
 try {

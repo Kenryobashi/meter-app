@@ -441,6 +441,10 @@ textarea.memo-input:focus { outline: 1px solid var(--hairline); border-color: va
   <!-- 週次レポート -->
   <div class="report-card" id="reportCard" style="display:none;">
     <button class="btn-report" id="reportBtn">📄 今週のレポートを作る</button>
+    <label class="etc-sent">
+      <input type="checkbox" id="reportSentCheck">
+      <span>この週は提出済み（日曜の通知を止める）</span>
+    </label>
     <div class="report-note" id="reportNote"></div>
   </div>
 
@@ -620,6 +624,9 @@ async function syncIDB() {
     const st = tx.objectStore('kv');
     st.put({k:'weekly-summary', text: lines.join('\n'), week: weekDates[0]});
     st.put({k:'missing-days', value: missing});
+    // 提出済みなら SW 側の日曜通知を抑止する
+    st.put({k:'report-sent', week: weekDates[0],
+            value: localStorage.getItem(`report-sent-${weekDates[0]}`) === '1'});
   } catch {}
 }
 
@@ -878,6 +885,8 @@ function renderAll() {
   const wkStart = getWeekDates(weekOffset)[0];
   document.getElementById('etcSentCheck').checked =
     localStorage.getItem(etcSentKey(wkStart)) === '1';
+  document.getElementById('reportSentCheck').checked = isReportSent(wkStart);
+  renderReportNote();
 }
 
 // ── Setup ─────────────────────────────────────────────────────
@@ -955,7 +964,8 @@ function checkOnOpen() {
   // 日曜 20時以降：未記録チェック
   if (day === 0 && hour >= 20) {
     const weekDates = getWeekDates(0);
-    const missing = weekDates.filter(ds => ds <= todayStr() && !getEntry(ds));
+    if (isReportSent(weekDates[0])) return;   // 提出済みの週は催促しない
+    const missing = weekDates.filter(ds => ds <= todayStr() && getMeter(ds) === null);
     if (missing.length > 0) {
       banner.innerHTML = `<strong>📋 今週の日報を忘れずに！</strong><br>未記録の日が <strong style="color:var(--amber)">${missing.length}日</strong> あります。`;
       banner.classList.add('show');
@@ -1038,6 +1048,27 @@ document.getElementById('vehicleSaveBtn').addEventListener('click', () => {
   if (!bootDone) { bootDone = true; checkNotifState(); checkOnOpen(); syncIDB(); }
 });
 let bootDone = false;
+
+// ── 提出済み（レポート送信済み）管理 ─────────────────────────
+function reportSentKey(weekStart) { return `report-sent-${weekStart}`; }
+function isReportSent(weekStart) { return localStorage.getItem(reportSentKey(weekStart)) === '1'; }
+function setReportSent(weekStart, sent) {
+  localStorage.setItem(reportSentKey(weekStart), sent ? '1' : '');
+  syncIDB();
+}
+document.getElementById('reportSentCheck').addEventListener('change', e => {
+  const wk = getWeekDates(weekOffset)[0];
+  setReportSent(wk, e.target.checked);
+  renderReportNote();
+  showToast(e.target.checked
+    ? 'この週を提出済みにしました（日曜の通知は止まります）'
+    : '提出済みを解除しました');
+});
+function renderReportNote() {
+  const wk = getWeekDates(weekOffset)[0];
+  const el = document.getElementById('reportNote');
+  el.textContent = isReportSent(wk) ? '✅ 提出済み。日曜のリマインド通知は届きません。' : '';
+}
 
 // ── ETC送付済みチェック ───────────────────────────────────────
 function etcSentKey(weekStart) { return `etc-sent-${weekStart}`; }
