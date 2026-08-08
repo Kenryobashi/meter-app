@@ -1,4 +1,4 @@
-const CACHE_NAME = 'meter-log-v7';
+const CACHE_NAME = 'meter-log-v8';
 const ASSETS = [
   './manifest.json',
   './icons/icon-192.png',
@@ -101,10 +101,18 @@ async function handleWeeklyCheck() {
     const missing = missingRec?.value ?? 0;
     if (missing > 0) {
       await self.registration.showNotification('🚗 メーター記録リマインド', {
-        body: `今週の車両日報に未記録が ${missing} 日あります。アプリを開いて入力してください。`,
+        body: `今週の車両日報に未記録が ${missing} 日あります。入力後、レポートを作成できます。`,
         icon: './icons/icon-192.png',
         badge: './icons/icon-192.png',
         tag: 'sunday-reminder',
+        requireInteraction: false,
+      });
+    } else {
+      await self.registration.showNotification('📄 今週のレポートができました', {
+        body: '今週分の記録が揃いました。アプリを開いてレポートを作成してください。',
+        icon: './icons/icon-192.png',
+        badge: './icons/icon-192.png',
+        tag: 'sunday-report',
         requireInteraction: false,
       });
     }

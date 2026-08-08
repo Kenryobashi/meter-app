@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>週次レポート｜車両運転日報兼運行費用伝票</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    background: #f4f5f7; color: #1a1a1a;
+  }
+  .sheet {
+    max-width: 1000px; margin: 0 auto; background: #fff;
+    padding: 20px; border-radius: 8px; box-shadow: 0 1px 6px rgba(0,0,0,.1);
+  }
+  h1 { font-size: 17px; margin: 0 0 4px; text-align: center; }
+  .period { text-align: center; font-size: 12px; color: #666; margin-bottom: 14px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .meta div {
+    flex: 1 1 150px; border: 1px solid #ccc; padding: 5px 8px; font-size: 12px;
+  }
+  .meta span { color: #777; display: block; font-size: 10px; }
+  table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  th, td { border: 1px solid #bbb; padding: 4px 5px; text-align: center; }
+  th { background: #eef1f5; font-weight: 600; font-size: 10px; }
+  td.dest { text-align: left; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.blank td { background: #fafafa; color: #bbb; }
+  tr.total td { background: #eef1f5; font-weight: 700; }
+  .warn { color: #c62828; font-weight: 600; }
+  .summary { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .summary div {
+    flex: 1 1 140px; border: 1px solid #ccc; padding: 6px 8px; font-size: 13px; font-weight: 700;
+  }
+  .summary span { display: block; font-size: 10px; color: #777; font-weight: 400; }
+  .notes { margin-top: 12px; font-size: 11px; color: #c62828; }
+  .notes p { margin: 2px 0; }
+  .etc { margin-top: 10px; font-size: 12px; }
+  .actions { max-width: 1000px; margin: 14px auto 0; display: flex; gap: 8px; flex-wrap: wrap; }
+  .actions button, .actions a {
+    flex: 1 1 140px; padding: 12px; border: none; border-radius: 8px;
+    background: #2f6fdb; color: #fff; font-size: 14px; font-weight: 600;
+    text-align: center; text-decoration: none; cursor: pointer;
+  }
+  .actions .sub { background: #5a6472; }
+  .err { max-width: 600px; margin: 40px auto; text-align: center; color: #666; }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .sheet { box-shadow: none; max-width: none; padding: 0; border-radius: 0; }
+    .actions { display: none; }
+    th { background: #eee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+const WEEKDAYS = ['日','月','火','水','木','金','土'];
+const COST_KEYS = [
+  {key:'fuelYen', label:'燃料代',        tag:'燃料'},
+  {key:'tollYen', label:'通行料',        tag:'高速'},
+  {key:'parkYen', label:'一時駐車代',    tag:'駐車場'},
+  {key:'washYen', label:'洗車ｳｫｯｼｬｰ液',  tag:'洗車'},
+  {key:'otherYen',label:'その他',        tag:'その他'},
+];
+
+function decodePayload(s) {
+  const b64 = s.replace(/-/g,'+').replace(/_/g,'/');
+  const pad = b64 + '==='.slice((b64.length + 3) % 4);
+  return JSON.parse(decodeURIComponent(escape(atob(pad))));
+}
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const yen = n => (n === null || n === undefined) ? '' : Number(n).toLocaleString('ja-JP');
+const mdOf = ds => { const [y,m,d] = ds.split('-').map(Number); return `${m}/${d}`; };
+const wdOf = ds => WEEKDAYS[new Date(ds + 'T00:00:00').getDay()];
+
+function render(p) {
+  const totals = {}; COST_KEYS.forEach(c => totals[c.key] = 0);
+  let fuelL = 0, workDays = 0, dist = 0, lastMeter = p.prevMeter ?? null;
+  const missing = new Set();
+
+  const rows = p.days.map(d => {
+    if (d.e === undefined || d.e === null) {
+      return `<tr class="blank"><td>${mdOf(d.d)}(${wdOf(d.d)})</td>
+        <td colspan="${4 + COST_KEYS.length + 2}">―</td></tr>`;
+    }
+    workDays++;
+    const start = (d.s === null || d.s === undefined) ? null : d.s;
+    if (start !== null) dist += (d.e - start);
+    lastMeter = d.e;
+    if (d.fuelL) fuelL += Number(d.fuelL);
+
+    const tags = d.tags || [];
+    const cells = COST_KEYS.map(c => {
+      const v = d[c.key];
+      if (v === null || v === undefined || v === '') {
+        if (tags.includes(c.tag)) { missing.add(c.label); return `<td class="warn">⚠未入力</td>`; }
+        return '<td></td>';
+      }
+      totals[c.key] += Number(v);
+      return `<td class="num">${yen(v)}</td>`;
+    }).join('');
+
+    return `<tr>
+      <td>${mdOf(d.d)}(${wdOf(d.d)})</td>
+      <td class="dest">${esc(d.dest)}</td>
+      <td class="num">${start === null ? '' : yen(start)}</td>
+      <td class="num">${yen(d.e)}</td>
+      <td class="num">${d.fuelL ? d.fuelL : ''}</td>
+      ${cells}
+      <td>${esc(d.st)}</td>
+      <td>${esc(d.et)}</td>
+    </tr>`;
+  }).join('');
+
+  const grand = COST_KEYS.reduce((a,c) => a + totals[c.key], 0);
+  const totalRow = `<tr class="total">
+    <td colspan="4">合計</td>
+    <td class="num">${fuelL ? fuelL.toFixed(1) : ''}</td>
+    ${COST_KEYS.map(c => `<td class="num">${totals[c.key] ? yen(totals[c.key]) : ''}</td>`).join('')}
+    <td colspan="2" class="num">伝票合計 ${yen(grand)} 円</td>
+  </tr>`;
+
+  const notes = [];
+  if (missing.size) notes.push(`※ ${[...missing].join('・')} に未入力があります（伝票合計は実額と異なる可能性があります）`);
+
+  document.getElementById('root').innerHTML = `
+  <div class="sheet">
+    <h1>車両運転日報兼運行費用伝票（週次まとめ）</h1>
+    <div class="period">${p.from} 〜 ${p.to}</div>
+    <div class="meta">
+      <div><span>部課名</span>${esc(p.dept)}</div>
+      <div><span>氏名</span>${esc(p.name)}</div>
+      <div><span>車両No</span>${esc(p.vehicleNo)}</div>
+      <div><span>前週最終指針値</span>${p.prevMeter != null ? yen(p.prevMeter) + ' km' : '―'}</div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th rowspan="2">日付</th><th rowspan="2">運行先</th>
+          <th>乗車時</th><th>降車時</th><th rowspan="2">給油量<br>(L)</th>
+          ${COST_KEYS.map(c => `<th rowspan="2">${c.label}</th>`).join('')}
+          <th colspan="2">時間</th>
+        </tr>
+        <tr>
+          <th>指針(km)</th><th>指針(km)</th>
+          <th>運転前</th><th>運転後</th>
+        </tr>
+      </thead>
+      <tbody>${rows}${totalRow}</tbody>
+    </table>
+    <div class="summary">
+      <div><span>週間稼働日数</span>${workDays} 日</div>
+      <div><span>週間走行距離数</span>${yen(dist)} km</div>
+      <div><span>週最終指針値</span>${lastMeter != null ? yen(lastMeter) + ' km' : '―'}</div>
+      <div><span>伝票合計</span>${yen(grand)} 円</div>
+    </div>
+    <div class="etc">ETC明細：${p.etcSent ? '✅ 会社メールへ送付済み' : '⬜️ 未送付'}</div>
+    <div class="notes">${notes.map(n => `<p>${esc(n)}</p>`).join('')}</div>
+  </div>
+  <div class="actions">
+    <button onclick="window.print()">🖨 印刷 / PDF保存</button>
+    <a class="sub" id="mailLink" href="#">✉️ このレポートをメールで送る</a>
+    <a class="sub" href="./index.html">← アプリに戻る</a>
+  </div>`;
+
+  const subject = `車両日報レポート ${p.from}〜${p.to}`;
+  const body = [
+    `${p.dept} ${p.name}／車両No ${p.vehicleNo}`,
+    `期間：${p.from} 〜 ${p.to}`,
+    `稼働日数：${workDays}日／走行距離：${dist}km／週最終指針値：${lastMeter ?? '―'}km`,
+    `伝票合計：${grand}円`,
+    '',
+    '▼ 表形式で開く（PCのブラウザで開いてください）',
+    location.href,
+  ].join('\n');
+  document.getElementById('mailLink').href =
+    `mailto:${p.email || ''}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+try {
+  const m = location.hash.match(/[#&]w=([^&]+)/);
+  if (!m) throw new Error('no payload');
+  render(decodePayload(m[1]));
+} catch (err) {
+  document.getElementById('root').innerHTML =
+    `<div class="err"><p>レポートデータが読み取れませんでした。</p>
+     <p><a href="./index.html">アプリに戻る</a></p></div>`;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>卒業制作 図解｜メタろぐ</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 32px;
+    background: #eef1f5;
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+    color: #1f2937;
+  }
+  .sheet {
+    max-width: 1240px; margin: 0 auto;
+    background: #fff; border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    padding: 40px 48px;
+  }
+
+  /* Header */
+  .header { display:flex; align-items:center; justify-content:space-between;
+    border-bottom:4px solid #2563eb; padding-bottom:16px; margin-bottom:24px; }
+  .header-left { display:flex; align-items:center; gap:14px; }
+  .logo-badge { width:50px; height:50px; border-radius:13px;
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    display:flex; align-items:center; justify-content:center; font-size:24px; }
+  .title-block h1 { margin:0; font-size:26px; font-weight:800; }
+  .title-block p { margin:1px 0 0; font-size:12.5px; color:#6b7280; }
+  .tag-badge { background:#eff6ff; color:#2563eb; font-size:11px; font-weight:700;
+    padding:5px 12px; border-radius:999px; border:1px solid #bfdbfe; }
+
+  /* Hero */
+  .hero { background:linear-gradient(135deg,#0f172a,#1e293b); color:#fff;
+    border-radius:16px; padding:22px 28px; margin-bottom:26px;
+    display:flex; align-items:center; justify-content:space-between; gap:20px; }
+  .hero-text { font-size:16px; font-weight:700; line-height:1.6; }
+  .hero-text span { color:#60a5fa; }
+  .hero-num { text-align:center; flex-shrink:0; }
+  .hero-num .n { font-size:32px; font-weight:800; color:#34d399; line-height:1; }
+  .hero-num .l { font-size:10.5px; color:#cbd5e1; margin-top:4px; }
+
+  /* Section */
+  .section { margin-bottom:26px; }
+  .section-head { display:flex; align-items:center; gap:9px; margin-bottom:12px; }
+  .section-num { width:26px; height:26px; border-radius:8px; background:#2563eb; color:#fff;
+    font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .section-head h2 { margin:0; font-size:16px; font-weight:800; }
+
+  /* Screenshots */
+  .shots-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:14px; }
+  .shot { border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; background:#f9fafb; }
+  .shot img { width:100%; display:block; }
+  .shot-caption { font-size:10.5px; color:#6b7280; padding:6px 8px; border-top:1px solid #e5e7eb; background:#fff; text-align:center; }
+  .shot-placeholder { height:180px; display:flex; align-items:center; justify-content:center;
+    color:#c1c8d1; font-size:11px; text-align:center; padding:10px; }
+
+  /* Icon chips (置き換えた機能一覧) */
+  .chip-row { display:flex; flex-wrap:wrap; gap:8px; }
+  .chip { display:flex; align-items:center; gap:6px; background:#f8fafc; border:1px solid #e5e7eb;
+    border-radius:999px; padding:6px 12px 6px 8px; font-size:11.5px; font-weight:600; color:#374151; }
+  .chip .ic { width:20px; height:20px; border-radius:6px; background:#dbeafe; color:#1d4ed8;
+    display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0; }
+
+  /* Architecture diagram */
+  .arch {
+    display:grid; grid-template-columns: 1fr 44px 1fr 44px 1fr; align-items:center;
+    gap:0; margin-top:6px;
+  }
+  .arch-box { background:#f8fafc; border:1.5px solid #cbd5e1; border-radius:14px;
+    padding:16px 14px; text-align:center; }
+  .arch-box.blue  { background:#eff6ff; border-color:#93c5fd; }
+  .arch-box.green { background:#ecfdf5; border-color:#86efac; }
+  .arch-box .a-ic { font-size:26px; margin-bottom:6px; }
+  .arch-box .a-title { font-size:12.5px; font-weight:800; color:#111827; }
+  .arch-box .a-sub { font-size:10px; color:#6b7280; margin-top:4px; line-height:1.5; }
+  .arch-arrow { display:flex; flex-direction:column; align-items:center; justify-content:center; color:#94a3b8; }
+  .arch-arrow .aa-glyph { font-size:20px; }
+  .arch-arrow .aa-label { font-size:9px; margin-top:2px; text-align:center; white-space:nowrap; }
+  .arch-note { margin-top:10px; font-size:11px; color:#9ca3af; text-align:center; }
+
+  /* Before/After compact */
+  .ba-wrap { display:grid; grid-template-columns:1fr 40px 1fr; align-items:stretch; }
+  .ba-card { border-radius:12px; padding:14px 16px; }
+  .ba-before { background:#fef2f2; border:1px solid #fecaca; }
+  .ba-after  { background:#ecfdf5; border:1px solid #a7f3d0; }
+  .ba-label { font-size:11px; font-weight:800; margin-bottom:8px; }
+  .ba-before .ba-label { color:#dc2626; }
+  .ba-after .ba-label { color:#059669; }
+  .ba-chip-list { display:flex; flex-direction:column; gap:6px; }
+  .ba-chip { display:flex; align-items:center; gap:6px; font-size:11.5px; color:#374151; }
+  .ba-chip .bic { font-size:12px; flex-shrink:0; }
+  .ba-arrow { display:flex; align-items:center; justify-content:center; font-size:20px; color:#9ca3af; }
+
+  .problem-flow { display:flex; align-items:center; justify-content:center; gap:8px; margin:14px 0 16px;
+    font-size:12px; font-weight:700; color:#4b5563; flex-wrap:wrap; }
+  .problem-flow .pf-step { background:#fff1f2; border:1px solid #fecdd3; color:#be123c;
+    padding:7px 14px; border-radius:999px; }
+  .problem-flow .pf-arrow { color:#cbd5e1; font-size:14px; }
+
+  /* Why - single line card */
+  .why-mini { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .why-mini-card { background:#f8fafc; border-left:4px solid #2563eb; border-radius:0 10px 10px 0;
+    padding:14px 16px; }
+  .why-mini-card .wm-ic { font-size:20px; margin-bottom:6px; }
+  .why-mini-card .wm-text { font-size:12px; line-height:1.6; color:#374151; font-weight:600; }
+
+  /* Kufu compact */
+  .kufu-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .kufu-card { border-radius:12px; padding:14px 16px; }
+  .kufu-good { background:#eff6ff; border:1px solid #bfdbfe; }
+  .kufu-hard { background:#fff7ed; border:1px solid #fed7aa; }
+  .kufu-title { font-size:12px; font-weight:800; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+  .kufu-good .kufu-title { color:#1d4ed8; }
+  .kufu-hard .kufu-title { color:#c2410c; }
+  .kufu-chip-list { display:flex; flex-direction:column; gap:6px; }
+  .kufu-chip { font-size:11px; color:#374151; display:flex; gap:6px; align-items:flex-start; }
+  .kufu-chip .kc-ic { flex-shrink:0; }
+
+  /* Effect scale */
+  .scale-flow { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px; }
+  .scale-step { background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px;
+    padding:12px 10px; text-align:center; position:relative; }
+  .scale-step .st-label { font-size:10px; color:#6b7280; margin-bottom:5px; }
+  .scale-step .st-val { font-size:15px; font-weight:800; color:#111827; line-height:1.3; }
+  .scale-step .st-sub { font-size:9.5px; color:#9ca3af; margin-top:3px; }
+  .scale-arrow-mini { position:absolute; right:-16px; top:50%; transform:translateY(-50%);
+    font-size:14px; color:#cbd5e1; z-index:1; }
+  .scale-step:last-child .scale-arrow-mini { display:none; }
+
+  .impact-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:14px; }
+  .impact-card { border-radius:14px; padding:16px 14px; text-align:center; border:1px solid; }
+  .impact-1 { background:#eff6ff; border-color:#bfdbfe; }
+  .impact-2 { background:#f0fdf4; border-color:#bbf7d0; }
+  .impact-3 { background:#fff1f2; border-color:#fecdd3; }
+  .impact-card .ic-label { font-size:11px; font-weight:700; margin-bottom:6px; color:#4b5563; }
+  .impact-card .ic-val { font-size:22px; font-weight:800; color:#111827; line-height:1.2; }
+  .impact-card .ic-sub { font-size:10px; color:#6b7280; margin-top:5px; line-height:1.5; }
+
+  .proposal-box { background:linear-gradient(135deg,#0f172a,#1e293b); color:#fff;
+    border-radius:14px; padding:16px 22px; display:flex; align-items:center; gap:16px; }
+  .proposal-box .pb-icon { font-size:26px; flex-shrink:0; }
+  .proposal-box .pb-text { font-size:12px; line-height:1.7; }
+  .proposal-box .pb-text b { color:#93c5fd; }
+  .proposal-box .pb-dept { flex-shrink:0; background:#2563eb; color:#fff; font-size:11px; font-weight:800;
+    padding:7px 14px; border-radius:999px; white-space:nowrap; }
+
+  .footer { margin-top:28px; padding-top:14px; border-top:1px solid #e5e7eb;
+    display:flex; justify-content:space-between; align-items:center; font-size:10.5px; color:#9ca3af; }
+
+  @media print { body { background:#fff; padding:0; } .sheet { box-shadow:none; border-radius:0; } }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo-badge">🚗</div>
+      <div class="title-block">
+        <h1>メタろぐ｜Meter-Log</h1>
+        <p>社有車メーター記録 & 車両日報アシストPWA</p>
+      </div>
+    </div>
+    <div class="tag-badge">卒業制作『自分の武器を作る』</div>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-text">車両日報を、<span>思い出す→計算する</span>から<span>見て打つだけ</span>に。</div>
+    <div class="hero-num">
+      <div class="n">7-10分→3分</div>
+      <div class="l">1件あたりの所要時間（実測）</div>
+    </div>
+  </div>
+
+  <!-- ① 作ったもの -->
+  <div class="section">
+    <div class="section-head"><div class="section-num">1</div><h2>作ったもの</h2></div>
+    <div class="shots-grid">
+      <div class="shot">
+        <img src="./shots/shot_home.png" alt="ホーム画面">
+        <div class="shot-caption">ホーム画面に追加</div>
+      </div>
+      <div class="shot">
+        <img src="./shots/shot_week.png" alt="週の一覧">
+        <div class="shot-caption">週別メーター・時刻・タグ</div>
+      </div>
+      <div class="shot">
+        <div class="shot-placeholder">日別入力画面<br>（撮影予定）</div>
+        <div class="shot-caption">タグ・メモ入力</div>
+      </div>
+    </div>
+    <div class="chip-row">
+      <div class="chip"><span class="ic">📱</span>ホーム画面インストール</div>
+      <div class="chip"><span class="ic">📶</span>オフライン対応</div>
+      <div class="chip"><span class="ic">🧮</span>距離自動計算</div>
+      <div class="chip"><span class="ic">🏷️</span>複数タグ＋メモ</div>
+      <div class="chip"><span class="ic">🕐</span>時刻自動記録</div>
+      <div class="chip"><span class="ic">🔔</span>週次リマインド通知</div>
+      <div class="chip"><span class="ic">🛣️</span>ETC照会導線</div>
+      <div class="chip"><span class="ic">👥</span>複数人で共用可</div>
+    </div>
+  </div>
+
+  <!-- アーキテクチャ -->
+  <div class="section">
+    <div class="section-head"><div class="section-num">＋</div><h2>しくみ（アーキテクチャ）</h2></div>
+    <div class="arch">
+      <div class="arch-box blue">
+        <div class="a-ic">📱</div>
+        <div class="a-title">スマホ（PWA）</div>
+        <div class="a-sub">入力・記録・保存<br>localStorage / SW</div>
+      </div>
+      <div class="arch-arrow"><div class="aa-glyph">→</div><div class="aa-label">目視</div></div>
+      <div class="arch-box">
+        <div class="a-ic">👀</div>
+        <div class="a-title">画面を見る</div>
+        <div class="a-sub">開始・終了メーター<br>時刻・タグを確認</div>
+      </div>
+      <div class="arch-arrow"><div class="aa-glyph">→</div><div class="aa-label">転記</div></div>
+      <div class="arch-box green">
+        <div class="a-ic">🖥️</div>
+        <div class="a-title">会社PC（専用ソフト）</div>
+        <div class="a-sub">オフライン<br>スクリプト設置なし</div>
+      </div>
+    </div>
+    <div class="arch-note">サーバー・DB不要／GitHub Pagesで無料ホスティング／会社PCは一切改変しない</div>
+  </div>
+
+  <!-- ② 課題 -->
+  <div class="section">
+    <div class="section-head"><div class="section-num">2</div><h2>解決する課題</h2></div>
+    <div class="problem-flow">
+      <div class="pf-step">思い出す</div><div class="pf-arrow">→</div>
+      <div class="pf-step">計算する</div><div class="pf-arrow">→</div>
+      <div class="pf-step">勤怠を遡る</div><div class="pf-arrow">→</div>
+      <div class="pf-step">先延ばし → 月末に集中</div>
+    </div>
+    <div class="ba-wrap">
+      <div class="ba-card ba-before">
+        <div class="ba-label">BEFORE：1件7〜10分</div>
+        <div class="ba-chip-list">
+          <div class="ba-chip"><span class="bic">🧠</span>記憶を頼りにメーター入力</div>
+          <div class="ba-chip"><span class="bic">✍️</span>走行距離を暗算・電卓計算</div>
+          <div class="ba-chip"><span class="bic">🕰️</span>勤怠履歴を遡って時刻確認</div>
+          <div class="ba-chip"><span class="bic">📚</span>4週間分をまとめ処理</div>
+        </div>
+      </div>
+      <div class="ba-arrow">→</div>
+      <div class="ba-card ba-after">
+        <div class="ba-label">AFTER：1件3分</div>
+        <div class="ba-chip-list">
+          <div class="ba-chip"><span class="bic">✅</span>その場でスマホに記録</div>
+          <div class="ba-chip"><span class="bic">⚡</span>距離・時刻は自動算出</div>
+          <div class="ba-chip"><span class="bic">👀</span>画面を見て転記するだけ</div>
+          <div class="ba-chip"><span class="bic">📆</span>週次で完結、まとめ処理が減る</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ 理由 -->
+  <div class="section">
+    <div class="section-head"><div class="section-num">3</div><h2>作りたいと思った理由</h2></div>
+    <div class="why-mini">
+      <div class="why-mini-card"><div class="wm-ic">😩</div><div class="wm-text">自分自身が毎週の面倒に直面していた</div></div>
+      <div class="why-mini-card"><div class="wm-ic">🔒</div><div class="wm-text">会社PCに手を加えられない制約 → スマホ完結で解決</div></div>
+      <div class="why-mini-card"><div class="wm-ic">🤝</div><div class="wm-text">同じ悩みを持つ同僚がいて共用化</div></div>
+    </div>
+  </div>
+
+  <!-- ④ 工夫・苦戦 -->
+  <div class="section">
+    <div class="section-head"><div class="section-num">4</div><h2>工夫・苦戦</h2></div>
+    <div class="kufu-grid">
+      <div class="kufu-card kufu-good">
+        <div class="kufu-title">💡 工夫</div>
+        <div class="kufu-chip-list">
+          <div class="kufu-chip"><span class="kc-ic">🔐</span>会社PC非改変前提でスマホ側に機能を集約</div>
+          <div class="kufu-chip"><span class="kc-ic">↩️</span>前週末メーターを自動継承</div>
+          <div class="kufu-chip"><span class="kc-ic">🎯</span>ETCボタンは高速利用週のみ表示</div>
+          <div class="kufu-chip"><span class="kc-ic">🧍</span>端末ごとにデータ独立、複数人で共用可</div>
+        </div>
+      </div>
+      <div class="kufu-card kufu-hard">
+        <div class="kufu-title">🔥 苦戦</div>
+        <div class="kufu-chip-list">
+          <div class="kufu-chip"><span class="kc-ic">♻️</span>Service Workerキャッシュの更新遅延</div>
+          <div class="kufu-chip"><span class="kc-ic">📐</span>日付桁数によるレイアウト崩れ</div>
+          <div class="kufu-chip"><span class="kc-ic">💾</span>端末別localStorage仕様の説明</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑤ 効果の試算・全社展開 -->
+  <div class="section">
+    <div class="section-head"><div class="section-num">5</div><h2>効果の試算と全社展開</h2></div>
+
+    <div class="scale-flow">
+      <div class="scale-step"><div class="st-label">個人（実測）</div><div class="st-val">7-10分→3分</div><div class="st-sub">1件あたり</div><div class="scale-arrow-mini">→</div></div>
+      <div class="scale-step"><div class="st-label">月間・個人</div><div class="st-val">4分×4週=16分</div><div class="st-sub">保守的試算</div><div class="scale-arrow-mini">→</div></div>
+      <div class="scale-step"><div class="st-label">月間・4名</div><div class="st-val">16分×4=64分</div><div class="st-sub">同僚も同効果と仮定</div><div class="scale-arrow-mini">→</div></div>
+      <div class="scale-step"><div class="st-label">年間・4名</div><div class="st-val">768分</div><div class="st-sub">12.8h／一人3.2h</div></div>
+    </div>
+
+    <div class="impact-cards">
+      <div class="impact-card impact-1"><div class="ic-label">個人・年間</div><div class="ic-val">3.2時間</div><div class="ic-sub">他業務へ再配分</div></div>
+      <div class="impact-card impact-2"><div class="ic-label">全社試算（200人）</div><div class="ic-val">640時間</div><div class="ic-sub">200人×年間3.2h</div></div>
+      <div class="impact-card impact-3"><div class="ic-label">労働日換算</div><div class="ic-val">約80日</div><div class="ic-sub">640時間÷8時間</div></div>
+    </div>
+
+    <div class="proposal-box">
+      <div class="pb-icon">🏢</div>
+      <div class="pb-text">サーバー不要・会社PC非改変 → <b>セキュリティ懸念なく全社展開可能</b>。営業車利用者へ横展開し、車両日報の時間を他業務へ。</div>
+      <div class="pb-dept">提案先：総務部</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>卒業制作『自分の武器を作る』｜メタろぐ（Meter-Log）</span>
+    <span>URL：https://kenryobashi.github.io/meter-app/</span>
+  </div>
+
+</div>
+</body>
+</html>
+</content>

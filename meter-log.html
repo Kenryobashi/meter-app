@@ -174,6 +174,37 @@ button { font-family: inherit; border: none; cursor: pointer; }
 .meter-input-wrap input::placeholder { color: #5a5142; opacity: 0.8; }
 .meter-unit { font-size: 12px; color: var(--text-dim); margin-left: 6px; align-self: flex-end; padding-bottom: 2px; }
 
+/* 乗車／降車時刻の2列 */
+.time-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.time-pair input {
+  width: 100%; background: var(--bezel); border: none; outline: none;
+  border-radius: 8px; padding: 9px 12px; color: var(--amber);
+  font-size: 17px; text-align: center;
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.6);
+  font-family: "SF Mono", "Roboto Mono", ui-monospace, monospace;
+}
+.time-pair input:disabled { color: var(--text-dim); }
+
+/* タグ連動の金額入力欄 */
+.cost-wrap { display: none; margin-top: 10px; }
+.cost-row {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--panel-raised); border-radius: 8px;
+  padding: 7px 12px; margin-bottom: 6px;
+}
+.cost-label { font-size: 12px; color: var(--text-dim); flex: 1; }
+.cost-input {
+  background: var(--bezel); border: none; outline: none; border-radius: 6px;
+  color: var(--amber); font-size: 16px; text-align: right;
+  padding: 6px 10px; width: 110px;
+  -webkit-appearance: none; appearance: textfield;
+  font-family: "SF Mono", "Roboto Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+.cost-input::placeholder { color: #5a5142; opacity: 0.7; }
+.cost-unit { font-size: 11px; color: var(--text-dim); width: 20px; }
+.dest-row .cost-input { width: 150px; text-align: left; font-size: 14px; color: var(--text); }
+
 .trip-row {
   display: flex; align-items: center; justify-content: space-between;
   padding: 8px 12px; background: var(--panel-raised);
@@ -261,6 +292,39 @@ textarea.memo-input:focus { outline: 1px solid var(--hairline); border-color: va
   font-size: 11.5px; color: var(--text-dim);
   text-align: center; margin-top: 7px; line-height: 1.5;
 }
+.etc-sent {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-top: 9px; font-size: 12.5px; color: var(--text-dim);
+  padding: 9px; background: var(--panel); border-radius: 8px;
+  border: 1px solid var(--hairline); cursor: pointer;
+}
+.etc-sent input { width: 17px; height: 17px; accent-color: #6fd3a0; }
+
+/* プロフィール設定 */
+.pf-label { display:block; font-size: 12px; color: var(--text-dim); margin: 12px 0 5px; }
+.pf-time-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pf-check {
+  display: flex; align-items: flex-start; gap: 9px; margin-top: 14px;
+  font-size: 12.5px; color: var(--text); line-height: 1.55; cursor: pointer;
+}
+.pf-check input { width: 18px; height: 18px; margin-top: 1px; accent-color: #ffb454; flex-shrink: 0; }
+.pf-check small { color: var(--text-dim); font-size: 11px; }
+
+/* 週次レポート */
+.report-card { margin-top: 10px; }
+.btn-report {
+  width: 100%; padding: 15px;
+  background: linear-gradient(180deg,#2f3a52,#243046);
+  border: 1px solid rgba(140,170,230,0.35);
+  border-radius: var(--radius);
+  color: #cfe0ff; font-size: 15px; font-weight: 700;
+  -webkit-tap-highlight-color: transparent; cursor: pointer;
+}
+.btn-report:active { background: #1c2536; }
+.report-note {
+  font-size: 11.5px; color: var(--text-dim);
+  text-align: center; margin-top: 7px; line-height: 1.5;
+}
 
 
 /* ── Toast ── */
@@ -278,16 +342,48 @@ textarea.memo-input:focus { outline: 1px solid var(--hairline); border-color: va
 
   <header class="app-header">
     <div class="app-title" id="appTitle">車両メーター記録</div>
+    <button class="notif-btn" id="settingsBtn" title="基本情報の設定">⚙</button>
     <button class="notif-btn" id="notifBtn" title="通知設定">🔔</button>
   </header>
 
-  <!-- 車両番号設定（初回のみ） -->
+  <!-- プロフィール設定（初回＋設定ボタンから再編集） -->
   <div class="setup-card" id="vehicleCard" style="display:none;">
-    <h2>🚗 あなたの車両番号を入力してください</h2>
-    <input type="text" id="vehicleInput" class="vehicle-input"
-      placeholder="例：301に_5421　横浜300さ_1234" maxlength="20">
-    <button class="btn-primary" id="vehicleSaveBtn" style="margin-top:12px;">保存して始める</button>
-    <div class="setup-note">ホーム画面に表示されます。後から変更したい場合はタイトルを長押ししてください。</div>
+    <h2>🚗 基本情報の設定</h2>
+    <div class="setup-note" style="margin-bottom:12px;">週次レポートの見出しに使います。一度登録すれば以後は入力不要です。</div>
+
+    <label class="pf-label">氏名</label>
+    <input type="text" id="pfName" class="vehicle-input" placeholder="例：[2004002]石橋 誠仁">
+
+    <label class="pf-label">部課名</label>
+    <input type="text" id="pfDept" class="vehicle-input" placeholder="例：[2636] 機械3部 北九州">
+
+    <label class="pf-label">車両No</label>
+    <input type="text" id="vehicleInput" class="vehicle-input" placeholder="例：301に_5421">
+
+    <label class="pf-label">いつもの運行先</label>
+    <input type="text" id="pfDest" class="vehicle-input" placeholder="例：×××社他">
+
+    <label class="pf-label">レポート送付先メールアドレス</label>
+    <input type="email" id="pfEmail" class="vehicle-input" placeholder="例：you@example.co.jp">
+
+    <div class="pf-time-row">
+      <div>
+        <label class="pf-label">乗車時刻（既定）</label>
+        <input type="time" id="pfStart" class="vehicle-input">
+      </div>
+      <div>
+        <label class="pf-label">降車時刻（既定）</label>
+        <input type="time" id="pfEnd" class="vehicle-input">
+      </div>
+    </div>
+
+    <label class="pf-check">
+      <input type="checkbox" id="pfAuto">
+      <span>降車時刻を保存した時刻で自動記録する<br>
+        <small>残業などで終業時刻が日々変わる方はONにしてください</small></span>
+    </label>
+
+    <button class="btn-primary" id="vehicleSaveBtn" style="margin-top:14px;">保存して始める</button>
   </div>
 
   <!-- 通知許可バナー -->
@@ -332,6 +428,16 @@ textarea.memo-input:focus { outline: 1px solid var(--hairline); border-color: va
       🛣 ETC利用照会サイトを開く
     </a>
     <div class="etc-note" id="etcNote"></div>
+    <label class="etc-sent">
+      <input type="checkbox" id="etcSentCheck">
+      <span>ETC明細を会社メールへ送付済み</span>
+    </label>
+  </div>
+
+  <!-- 週次レポート -->
+  <div class="report-card" id="reportCard" style="display:none;">
+    <button class="btn-report" id="reportBtn">📄 今週のレポートを作る</button>
+    <div class="report-note" id="reportNote"></div>
   </div>
 
 
@@ -341,9 +447,54 @@ textarea.memo-input:focus { outline: 1px solid var(--hairline); border-color: va
 <script>
 const STORAGE_KEY = 'vehicle-meter-log';
 const VEHICLE_KEY = 'vehicle-id';
+const PROFILE_KEY = 'vehicle-profile';
 const NOTIF_DISMISSED_KEY = 'notif-banner-dismissed';
 const WEEKDAYS = ['日','月','火','水','木','金','土'];
-const TAGS = ['遠方','高速','会食','駐車場','燃料','洗車'];
+const TAGS = ['遠方','高速','会食','駐車場','燃料','洗車','その他'];
+
+// タグ → 金額入力欄の定義（会社フォーマットの費目に対応）
+const TAG_FIELDS = {
+  '燃料':   [{key:'fuelL',  label:'給油量', unit:'L'},
+             {key:'fuelYen',label:'燃料代', unit:'円'}],
+  '高速':   [{key:'tollYen',label:'通行料', unit:'円'}],
+  '駐車場': [{key:'parkYen',label:'一時駐車代', unit:'円'}],
+  '洗車':   [{key:'washYen',label:'洗車・ウォッシャー液', unit:'円'}],
+  'その他': [{key:'otherYen',label:'その他', unit:'円'}],
+};
+// レポート集計に使う費目一覧
+const COST_KEYS = [
+  {key:'fuelYen', label:'燃料代'},
+  {key:'tollYen', label:'通行料'},
+  {key:'parkYen', label:'一時駐車代'},
+  {key:'washYen', label:'洗車ｳｫｯｼｬｰ液'},
+  {key:'otherYen',label:'その他'},
+];
+// 費目キー → 発生を示すタグ（未入力警告の判定用）
+const COST_TAG_OF = { fuelYen:'燃料', tollYen:'高速', parkYen:'駐車場', washYen:'洗車', otherYen:'その他' };
+
+// ── プロフィール（初回設定で登録する固定情報） ────────────────
+const DEFAULT_PROFILE = {
+  name: '', dept: '', vehicleNo: '', defaultDest: '',
+  startTime: '07:30', endTime: '18:30', autoEndTime: false, email: ''
+};
+let profile = { ...DEFAULT_PROFILE };
+
+function loadProfile() {
+  try {
+    const raw = localStorage.getItem(PROFILE_KEY);
+    if (raw) profile = { ...DEFAULT_PROFILE, ...JSON.parse(raw) };
+  } catch { profile = { ...DEFAULT_PROFILE }; }
+  // 旧バージョンの車両番号を引き継ぐ
+  if (!profile.vehicleNo) {
+    const old = localStorage.getItem(VEHICLE_KEY);
+    if (old) profile.vehicleNo = old;
+  }
+  return profile;
+}
+function saveProfile() {
+  localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+  if (profile.vehicleNo) localStorage.setItem(VEHICLE_KEY, profile.vehicleNo);
+}
 
 let state = { entries: {} };
 let weekOffset = 0;
@@ -363,6 +514,21 @@ function getEntry(ds) {
   if (typeof e === 'number') return { meter: e, tags: [], memo: '', time: '' }; // 旧形式互換
   return e;
 }
+// 数値取得（空文字・未入力は null）
+function num(v) {
+  if (v === '' || v === null || v === undefined) return null;
+  const n = parseFloat(v);
+  return isNaN(n) ? null : n;
+}
+// その日の運行先（未入力ならプロフィールの既定値）
+function destOf(entry) {
+  const d = (entry?.dest || '').trim();
+  if (!d) return profile.defaultDest || '';
+  return profile.defaultDest ? `${d}→${profile.defaultDest}` : d;
+}
+// その日の乗車／降車時刻（未設定なら既定値）
+function startTimeOf(entry) { return entry?.startTime || profile.startTime || ''; }
+function endTimeOf(entry)   { return entry?.time      || profile.endTime   || ''; }
 function getMeter(ds) { return getEntry(ds)?.meter ?? null; }
 
 function getWeekDates(offset) {
@@ -510,11 +676,17 @@ function renderDayCards() {
           </span>
         </div>
 
-        <div class="fld-label">乗り終わり時刻（保存時に自動記録／手動修正可）</div>
-        <div class="meter-input-wrap">
-          <input type="time" class="time-input num"
-            value="${entry?.time || ''}"
-            ${isFuture ? 'disabled' : ''}>
+        <div class="time-pair">
+          <div>
+            <div class="fld-label">乗車時刻</div>
+            <input type="time" class="start-time-input num"
+              value="${entry?.startTime || profile.startTime || ''}" ${isFuture ? 'disabled' : ''}>
+          </div>
+          <div>
+            <div class="fld-label">降車時刻</div>
+            <input type="time" class="time-input num"
+              value="${entry?.time || (profile.autoEndTime ? '' : (profile.endTime || ''))}" ${isFuture ? 'disabled' : ''}>
+          </div>
         </div>
 
         <div class="fld-label">メモタグ（複数選択可）</div>
@@ -524,9 +696,11 @@ function renderDayCards() {
           ).join('')}
         </div>
 
+        <div class="cost-wrap" data-costs></div>
+
         <div class="fld-label">フリーメモ</div>
         <textarea class="memo-input" rows="2"
-          placeholder="例：〇〇への出張・△△駐車場500円">${entry?.memo || ''}</textarea>
+          placeholder="例：〇〇への出張・特記事項">${entry?.memo || ''}</textarea>
 
         <button class="btn-primary day-save-btn" ${isFuture ? 'disabled' : ''}>保存する</button>
       </div>
@@ -548,9 +722,49 @@ function renderDayCards() {
       else { tripEl.textContent = diff.toLocaleString() + ' km'; tripEl.className = 't-val num'; }
     });
 
+    // タグに応じた金額入力欄を描画（入力中の値は保持）
+    const costWrap = card.querySelector('[data-costs]');
+    function renderCostFields() {
+      const active = [...card.querySelectorAll('.tag-pill.active')].map(p => p.dataset.tag);
+      // 現在画面に入っている値を退避
+      const typed = {};
+      costWrap.querySelectorAll('[data-cost-key]').forEach(i => typed[i.dataset.costKey] = i.value);
+
+      let html = '';
+      // 高速タグ：例外の運行先を入力
+      if (active.includes('高速')) {
+        html += `
+          <div class="cost-row dest-row">
+            <span class="cost-label">運行先（いつもと違う場合）</span>
+            <input type="text" class="cost-input dest-input" data-cost-key="dest"
+              placeholder="${profile.defaultDest || '例：A社'}"
+              value="${(typed.dest ?? entry?.dest ?? '').replace(/"/g,'&quot;')}">
+          </div>`;
+      }
+      active.forEach(tag => {
+        (TAG_FIELDS[tag] || []).forEach(f => {
+          const v = typed[f.key] ?? (entry?.[f.key] ?? '');
+          html += `
+            <div class="cost-row">
+              <span class="cost-label">${f.label}</span>
+              <input type="number" inputmode="numeric" class="cost-input num"
+                data-cost-key="${f.key}" placeholder="0" value="${v}">
+              <span class="cost-unit">${f.unit}</span>
+            </div>`;
+        });
+      });
+      costWrap.innerHTML = html;
+      costWrap.style.display = html ? 'block' : 'none';
+    }
+    renderCostFields();
+
     // タグ切り替え（カード開閉と分離）
     card.querySelectorAll('.tag-pill').forEach(pill => {
-      pill.addEventListener('click', e => { e.stopPropagation(); pill.classList.toggle('active'); });
+      pill.addEventListener('click', e => {
+        e.stopPropagation();
+        pill.classList.toggle('active');
+        renderCostFields();
+      });
     });
 
     // 保存
@@ -561,8 +775,17 @@ function renderDayCards() {
       const memo = card.querySelector('.memo-input').value.trim();
       const timeInput = card.querySelector('.time-input').value;
       const nowHHMM = new Date().toTimeString().slice(0,5);
-      const time = timeInput || nowHHMM; // 未入力なら保存した瞬間の時刻を自動記録
-      state.entries[ds] = { meter: meterVal, tags, memo, time };
+      // 自動記録ONなら保存時刻、OFFなら既定値。手入力があれば常にそれを優先
+      const time = timeInput || (profile.autoEndTime ? nowHHMM : (profile.endTime || nowHHMM));
+      const startTime = card.querySelector('.start-time-input').value || profile.startTime || '';
+
+      const rec = { meter: meterVal, tags, memo, time, startTime };
+      costWrap.querySelectorAll('[data-cost-key]').forEach(i => {
+        const k = i.dataset.costKey;
+        const v = i.value.trim();
+        if (v !== '') rec[k] = (k === 'dest') ? v : num(v);
+      });
+      state.entries[ds] = rec;
       saveState();
       const btn = card.querySelector('.day-save-btn');
       btn.classList.add('save-pulse');
@@ -603,17 +826,25 @@ function renderAll() {
   const hasEntries = sortedDates().length > 0;
   document.getElementById('setupCard').style.display = hasEntries ? 'none' : 'block';
   document.getElementById('weekNav').style.display = hasEntries ? 'flex' : 'none';
+  document.getElementById('reportCard').style.display = hasEntries ? 'block' : 'none';
   if (!hasEntries) return;
   renderWeekNav();
   renderDayCards();
   renderEtcCard();
+  const wkStart = getWeekDates(weekOffset)[0];
+  document.getElementById('etcSentCheck').checked =
+    localStorage.getItem(etcSentKey(wkStart)) === '1';
 }
 
 // ── Setup ─────────────────────────────────────────────────────
 document.getElementById('setupSaveBtn').addEventListener('click', () => {
   const val = parseFloat(document.getElementById('setupInput').value);
   if (isNaN(val)) { showToast('数値を入力してください'); return; }
-  state.entries[todayStr()] = { meter: val, tags: [], memo: '', time: new Date().toTimeString().slice(0,5) };
+  state.entries[todayStr()] = {
+    meter: val, tags: [], memo: '',
+    time: profile.endTime || new Date().toTimeString().slice(0,5),
+    startTime: profile.startTime || ''
+  };
   saveState(); showToast('開始しました！'); renderAll();
 });
 
@@ -712,75 +943,133 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(() => {});
 }
 
-// ── Vehicle ID ────────────────────────────────────────────────
-function loadVehicleId() {
-  const id = localStorage.getItem(VEHICLE_KEY);
-  const titleEl = document.getElementById('appTitle');
-  const vehicleCard = document.getElementById('vehicleCard');
-
-  if (id) {
-    titleEl.textContent = `車両メーター記録：${id}`;
-    vehicleCard.style.display = 'none';
-    return true; // 設定済み
-  } else {
-    titleEl.textContent = '車両メーター記録';
-    vehicleCard.style.display = 'block';
-    return false; // 未設定
-  }
+// ── プロフィール設定画面 ──────────────────────────────────────
+function fillProfileForm() {
+  document.getElementById('pfName').value    = profile.name || '';
+  document.getElementById('pfDept').value    = profile.dept || '';
+  document.getElementById('vehicleInput').value = profile.vehicleNo || '';
+  document.getElementById('pfDest').value    = profile.defaultDest || '';
+  document.getElementById('pfEmail').value   = profile.email || '';
+  document.getElementById('pfStart').value   = profile.startTime || '07:30';
+  document.getElementById('pfEnd').value     = profile.endTime || '18:30';
+  document.getElementById('pfAuto').checked  = !!profile.autoEndTime;
 }
 
-function saveVehicleId(id) {
-  localStorage.setItem(VEHICLE_KEY, id);
-  document.getElementById('appTitle').textContent = `車両メーター記録：${id}`;
-  document.getElementById('vehicleCard').style.display = 'none';
+function applyTitle() {
+  document.getElementById('appTitle').textContent =
+    profile.vehicleNo ? `車両メーター記録：${profile.vehicleNo}` : '車両メーター記録';
 }
+
+// 設定済みかどうか（車両Noがあれば設定済みとみなす）
+function isProfileReady() { return !!profile.vehicleNo; }
+
+function showProfileCard(show) {
+  document.getElementById('vehicleCard').style.display = show ? 'block' : 'none';
+  if (show) fillProfileForm();
+}
+
+document.getElementById('settingsBtn').addEventListener('click', () => {
+  const card = document.getElementById('vehicleCard');
+  const opening = card.style.display === 'none';
+  showProfileCard(opening);
+  if (opening) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
 
 document.getElementById('vehicleSaveBtn').addEventListener('click', () => {
-  const val = document.getElementById('vehicleInput').value.trim();
-  if (!val) { showToast('車両番号を入力してください'); return; }
-  saveVehicleId(val);
-  showToast('車両番号を保存しました');
+  const v = document.getElementById('vehicleInput').value.trim();
+  if (!v) { showToast('車両Noを入力してください'); return; }
+  profile.name        = document.getElementById('pfName').value.trim();
+  profile.dept        = document.getElementById('pfDept').value.trim();
+  profile.vehicleNo   = v;
+  profile.defaultDest = document.getElementById('pfDest').value.trim();
+  profile.email       = document.getElementById('pfEmail').value.trim();
+  profile.startTime   = document.getElementById('pfStart').value || '07:30';
+  profile.endTime     = document.getElementById('pfEnd').value || '18:30';
+  profile.autoEndTime = document.getElementById('pfAuto').checked;
+  saveProfile();
+  applyTitle();
+  showProfileCard(false);
+  showToast('基本情報を保存しました');
   renderAll();
+  if (!bootDone) { bootDone = true; checkNotifState(); checkOnOpen(); syncIDB(); }
+});
+let bootDone = false;
+
+// ── ETC送付済みチェック ───────────────────────────────────────
+function etcSentKey(weekStart) { return `etc-sent-${weekStart}`; }
+document.getElementById('etcSentCheck').addEventListener('change', e => {
+  const dates = getWeekDates(weekOffset);
+  localStorage.setItem(etcSentKey(dates[0]), e.target.checked ? '1' : '');
+  showToast(e.target.checked ? 'ETC明細を送付済みにしました' : '送付済みを解除しました');
 });
 
-// タイトル長押しで車両番号を変更
-document.getElementById('appTitle').addEventListener('contextmenu', e => {
-  e.preventDefault();
-  editVehicleId();
-});
-let titlePressTimer;
-document.getElementById('appTitle').addEventListener('touchstart', () => {
-  titlePressTimer = setTimeout(editVehicleId, 600);
-});
-document.getElementById('appTitle').addEventListener('touchend', () => clearTimeout(titlePressTimer));
-
-function editVehicleId() {
-  const current = localStorage.getItem(VEHICLE_KEY) || '';
-  const next = prompt('車両番号を変更してください', current);
-  if (next === null) return;
-  const val = next.trim();
-  if (!val) { showToast('車両番号を入力してください'); return; }
-  saveVehicleId(val);
-  showToast('車両番号を変更しました');
+// ── 週次レポート生成 ──────────────────────────────────────────
+// UTF-8 対応 Base64（URLに載せるためハッシュ記号などを避ける）
+function encodePayload(obj) {
+  const json = JSON.stringify(obj);
+  const b64 = btoa(unescape(encodeURIComponent(json)));
+  return b64.replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 }
+
+function buildReportPayload() {
+  const dates = getWeekDates(weekOffset);
+  const days = dates.map(ds => {
+    const e = getEntry(ds);
+    if (!e) return { d: ds };
+    const prev = prevMeterBefore(ds);
+    return {
+      d: ds,
+      s: prev,                    // 乗車時指針（前日の降車時指針）
+      e: e.meter,                 // 降車時指針
+      dest: destOf(e),
+      st: startTimeOf(e),
+      et: endTimeOf(e),
+      tags: e.tags || [],
+      fuelL: e.fuelL ?? null, fuelYen: e.fuelYen ?? null,
+      tollYen: e.tollYen ?? null, parkYen: e.parkYen ?? null,
+      washYen: e.washYen ?? null, otherYen: e.otherYen ?? null,
+      memo: e.memo || ''
+    };
+  });
+  return {
+    v: 1,
+    name: profile.name, dept: profile.dept, vehicleNo: profile.vehicleNo,
+    email: profile.email || '',
+    from: dates[0], to: dates[6],
+    prevMeter: prevMeterBefore(dates[0]),   // 前週最終指針値
+    etcSent: localStorage.getItem(etcSentKey(dates[0])) === '1',
+    days
+  };
+}
+
+function reportUrl() {
+  const base = location.href.replace(/[^/]*$/, '') + 'report.html';
+  return base + '#w=' + encodePayload(buildReportPayload());
+}
+
+document.getElementById('reportBtn').addEventListener('click', () => {
+  if (!isProfileReady()) { showToast('先に⚙から基本情報を設定してください'); return; }
+  location.href = reportUrl();
+});
 
 // ── Init ──────────────────────────────────────────────────────
 (function init() {
-  const hasVehicle = loadVehicleId();
+  loadProfile();
+  applyTitle();
   loadState();
-  if (hasVehicle) {
+  const ready = isProfileReady();
+  showProfileCard(!ready);
+  if (ready) {
+    bootDone = true;
     renderAll();
     checkNotifState();
     checkOnOpen();
     syncIDB();
+  } else {
+    document.getElementById('setupCard').style.display = 'none';
+    document.getElementById('weekNav').style.display = 'none';
+    document.getElementById('reportCard').style.display = 'none';
   }
-  // 車両番号設定後にメーター初期設定へ進む
-  document.getElementById('vehicleSaveBtn').addEventListener('click', () => {
-    renderAll();
-    checkNotifState();
-    checkOnOpen();
-    syncIDB();
-  }, { once: true });
 })();
 </script>
 </body>
