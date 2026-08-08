@@ -78,6 +78,32 @@
   .arch-arrow .aa-glyph { font-size:20px; }
   .arch-arrow .aa-label { font-size:9px; margin-top:2px; text-align:center; white-space:nowrap; }
   .arch-note { margin-top:10px; font-size:11px; color:#9ca3af; text-align:center; }
+  .arch.arch4 { grid-template-columns: 1fr 36px 1fr 36px 1fr 36px 1fr; }
+  .arch-box.amber { background:#fffbeb; border-color:#fcd34d; }
+  .arch-branch { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+  .branch-box { border-radius:12px; padding:13px 16px; display:flex; align-items:center; gap:10px; }
+  .branch-self { background:#eff6ff; border:1px solid #bfdbfe; }
+  .branch-hand { background:#f5f3ff; border:1px solid #ddd6fe; }
+  .branch-box .b-ic { font-size:22px; flex-shrink:0; }
+  .branch-box .b-title { font-size:12px; font-weight:800; color:#111827; }
+  .branch-box .b-sub { font-size:10px; color:#6b7280; margin-top:3px; line-height:1.5; }
+
+  /* 思考の転換（フィードバック反映） */
+  .pivot { display:grid; grid-template-columns:1fr 44px 1fr 44px 1fr; align-items:center; }
+  .pivot-box { border-radius:12px; padding:14px 16px; text-align:center; }
+  .pivot-stop { background:#fef2f2; border:1px solid #fecaca; }
+  .pivot-think{ background:#fffbeb; border:1px solid #fcd34d; }
+  .pivot-open { background:#ecfdf5; border:1px solid #a7f3d0; }
+  .pivot-box .p-ic { font-size:24px; margin-bottom:5px; }
+  .pivot-box .p-label { font-size:10px; font-weight:800; margin-bottom:4px; letter-spacing:.04em; }
+  .pivot-stop .p-label { color:#dc2626; }
+  .pivot-think .p-label{ color:#b45309; }
+  .pivot-open .p-label { color:#059669; }
+  .pivot-box .p-text { font-size:11.5px; font-weight:700; color:#374151; line-height:1.6; }
+  .pivot-arrow { display:flex; align-items:center; justify-content:center; font-size:20px; color:#cbd5e1; }
+  .pivot-quote { margin-top:12px; background:#f8fafc; border-left:4px solid #94a3b8;
+    padding:11px 16px; font-size:11.5px; color:#475569; line-height:1.7; border-radius:0 8px 8px 0; }
+  .pivot-quote b { color:#1f2937; }
 
   /* Before/After compact */
   .ba-wrap { display:grid; grid-template-columns:1fr 40px 1fr; align-items:stretch; }
@@ -160,15 +186,18 @@
       <div class="logo-badge">🚗</div>
       <div class="title-block">
         <h1>メタろぐ｜Meter-Log</h1>
-        <p>社有車メーター記録 & 車両日報アシストPWA</p>
+        <p>社有車メーター記録 → 週次レポート自動生成PWA</p>
       </div>
     </div>
-    <div class="tag-badge">卒業制作『自分の武器を作る』</div>
+    <div class="tag-badge">卒業制作『自分の武器を作る』／第2版</div>
   </div>
 
   <!-- Hero -->
   <div class="hero">
-    <div class="hero-text">車両日報を、<span>思い出す→計算する</span>から<span>見て打つだけ</span>に。</div>
+    <div class="hero-text">
+      移動の<span>隙間時間</span>に打ち終える。<br>
+      会社PCには<span>完成版を見て写すだけ</span>。
+    </div>
     <div class="hero-num">
       <div class="n">7-10分→3分</div>
       <div class="l">1件あたりの所要時間（実測）</div>
@@ -188,45 +217,96 @@
         <div class="shot-caption">週別メーター・時刻・タグ</div>
       </div>
       <div class="shot">
-        <div class="shot-placeholder">日別入力画面<br>（撮影予定）</div>
-        <div class="shot-caption">タグ・メモ入力</div>
+        <div class="shot-placeholder">週次レポート画面<br>（会社様式に準拠した表）<br>※撮影予定</div>
+        <div class="shot-caption">出力：完成版レポート</div>
       </div>
     </div>
     <div class="chip-row">
-      <div class="chip"><span class="ic">📱</span>ホーム画面インストール</div>
+      <div class="chip"><span class="ic">📄</span>会社様式の週次レポート出力</div>
+      <div class="chip"><span class="ic">✉️</span>自分のPCへメール配信</div>
+      <div class="chip"><span class="ic">🖨️</span>紙に印刷して受け渡し</div>
+      <div class="chip"><span class="ic">💴</span>タグ連動の費用入力</div>
+      <div class="chip"><span class="ic">⏸️</span>費用だけ先に一時保存</div>
+      <div class="chip"><span class="ic">🧮</span>距離・合計を自動計算</div>
+      <div class="chip"><span class="ic">🕐</span>時刻の自動／固定2モード</div>
+      <div class="chip"><span class="ic">🔔</span>提出済みなら通知OFF</div>
       <div class="chip"><span class="ic">📶</span>オフライン対応</div>
-      <div class="chip"><span class="ic">🧮</span>距離自動計算</div>
-      <div class="chip"><span class="ic">🏷️</span>複数タグ＋メモ</div>
-      <div class="chip"><span class="ic">🕐</span>時刻自動記録</div>
-      <div class="chip"><span class="ic">🔔</span>週次リマインド通知</div>
-      <div class="chip"><span class="ic">🛣️</span>ETC照会導線</div>
-      <div class="chip"><span class="ic">👥</span>複数人で共用可</div>
+    </div>
+  </div>
+
+  <!-- 思考の転換 -->
+  <div class="section">
+    <div class="section-head"><div class="section-num">＋</div><h2>設計が変わった瞬間（受講生フィードバック）</h2></div>
+    <div class="pivot">
+      <div class="pivot-box pivot-stop">
+        <div class="p-ic">🚧</div>
+        <div class="p-label">思考停止していた前提</div>
+        <div class="p-text">会社PCに繋がらない<br>→ だからスマホ画面止まり</div>
+      </div>
+      <div class="pivot-arrow">→</div>
+      <div class="pivot-box pivot-think">
+        <div class="p-ic">💭</div>
+        <div class="p-label">問い直し</div>
+        <div class="p-text">繋がらなくても<br>「受け取れる」形は？</div>
+      </div>
+      <div class="pivot-arrow">→</div>
+      <div class="pivot-box pivot-open">
+        <div class="p-ic">📬</div>
+        <div class="p-label">出した答え</div>
+        <div class="p-text">完成版レポートを<br>メールと紙で届ける</div>
+      </div>
+    </div>
+    <div class="pivot-quote">
+      「制約があるからここまで」で止めず、<b>制約の外側で価値を届ける方法を考え続ける</b>。<br>
+      入力の手数は増やさないまま、出力を<b>“記録”から“ほぼ完成した提出物”へ</b>引き上げた。
     </div>
   </div>
 
   <!-- アーキテクチャ -->
   <div class="section">
     <div class="section-head"><div class="section-num">＋</div><h2>しくみ（アーキテクチャ）</h2></div>
-    <div class="arch">
+    <div class="arch arch4">
       <div class="arch-box blue">
         <div class="a-ic">📱</div>
         <div class="a-title">スマホ（PWA）</div>
-        <div class="a-sub">入力・記録・保存<br>localStorage / SW</div>
+        <div class="a-sub">移動の隙間時間に<br>その場で入力</div>
       </div>
-      <div class="arch-arrow"><div class="aa-glyph">→</div><div class="aa-label">目視</div></div>
+      <div class="arch-arrow"><div class="aa-glyph">→</div><div class="aa-label">週1回</div></div>
+      <div class="arch-box amber">
+        <div class="a-ic">📄</div>
+        <div class="a-title">週次レポート生成</div>
+        <div class="a-sub">会社様式の表に整形<br>合計まで自動計算</div>
+      </div>
+      <div class="arch-arrow"><div class="aa-glyph">→</div><div class="aa-label">メール</div></div>
       <div class="arch-box">
-        <div class="a-ic">👀</div>
-        <div class="a-title">画面を見る</div>
-        <div class="a-sub">開始・終了メーター<br>時刻・タグを確認</div>
+        <div class="a-ic">✉️</div>
+        <div class="a-title">自分のPCへ届く</div>
+        <div class="a-sub">本文のURLを開くと<br>同じ表が再現</div>
       </div>
-      <div class="arch-arrow"><div class="aa-glyph">→</div><div class="aa-label">転記</div></div>
+      <div class="arch-arrow"><div class="aa-glyph">→</div><div class="aa-label">提出</div></div>
       <div class="arch-box green">
         <div class="a-ic">🖥️</div>
         <div class="a-title">会社PC（専用ソフト）</div>
-        <div class="a-sub">オフライン<br>スクリプト設置なし</div>
+        <div class="a-sub">見て写すだけ<br>PCは一切改変しない</div>
       </div>
     </div>
-    <div class="arch-note">サーバー・DB不要／GitHub Pagesで無料ホスティング／会社PCは一切改変しない</div>
+    <div class="arch-branch">
+      <div class="branch-box branch-self">
+        <div class="b-ic">👀</div>
+        <div>
+          <div class="b-title">自分で打つ場合</div>
+          <div class="b-sub">完成版を見ながら写すだけ。思い出す・計算する工程がゼロに。</div>
+        </div>
+      </div>
+      <div class="branch-box branch-hand">
+        <div class="b-ic">🤝</div>
+        <div>
+          <div class="b-title">事務職へ渡す場合</div>
+          <div class="b-sub">印刷したレポート＋レシートを手渡せば、入力作業ごと委任できる。</div>
+        </div>
+      </div>
+    </div>
+    <div class="arch-note">サーバー・DB・AI API 不要／データはURLに内包して受け渡し／運用コスト0円</div>
   </div>
 
   <!-- ② 課題 -->
@@ -252,10 +332,10 @@
       <div class="ba-card ba-after">
         <div class="ba-label">AFTER：1件3分</div>
         <div class="ba-chip-list">
-          <div class="ba-chip"><span class="bic">✅</span>その場でスマホに記録</div>
-          <div class="ba-chip"><span class="bic">⚡</span>距離・時刻は自動算出</div>
-          <div class="ba-chip"><span class="bic">👀</span>画面を見て転記するだけ</div>
-          <div class="ba-chip"><span class="bic">📆</span>週次で完結、まとめ処理が減る</div>
+          <div class="ba-chip"><span class="bic">✅</span>払った瞬間・降りた瞬間に記録</div>
+          <div class="ba-chip"><span class="bic">⚡</span>距離・時刻・費用合計は自動</div>
+          <div class="ba-chip"><span class="bic">📄</span>週1回、完成版レポートが届く</div>
+          <div class="ba-chip"><span class="bic">🤝</span>紙で渡せば入力ごと委任できる</div>
         </div>
       </div>
     </div>
@@ -278,18 +358,19 @@
       <div class="kufu-card kufu-good">
         <div class="kufu-title">💡 工夫</div>
         <div class="kufu-chip-list">
-          <div class="kufu-chip"><span class="kc-ic">🔐</span>会社PC非改変前提でスマホ側に機能を集約</div>
-          <div class="kufu-chip"><span class="kc-ic">↩️</span>前週末メーターを自動継承</div>
-          <div class="kufu-chip"><span class="kc-ic">🎯</span>ETCボタンは高速利用週のみ表示</div>
-          <div class="kufu-chip"><span class="kc-ic">🧍</span>端末ごとにデータ独立、複数人で共用可</div>
+          <div class="kufu-chip"><span class="kc-ic">📬</span>サーバーなしでPCへ届ける（データをURLに内包）</div>
+          <div class="kufu-chip"><span class="kc-ic">🏷️</span>タグを押すと必要な金額欄だけ出る＝入力数を増やさない</div>
+          <div class="kufu-chip"><span class="kc-ic">⏸️</span>メーター未確定でも費用だけ先に残せる一時保存</div>
+          <div class="kufu-chip"><span class="kc-ic">↩️</span>運行先・時刻は既定値を持たせ、例外時だけ入力</div>
         </div>
       </div>
       <div class="kufu-card kufu-hard">
         <div class="kufu-title">🔥 苦戦</div>
         <div class="kufu-chip-list">
+          <div class="kufu-chip"><span class="kc-ic">📎</span>メールにPDFを添付できない制約の回避策探し</div>
+          <div class="kufu-chip"><span class="kc-ic">⚖️</span>項目を増やすほど正確、増やすほど面倒というジレンマ</div>
           <div class="kufu-chip"><span class="kc-ic">♻️</span>Service Workerキャッシュの更新遅延</div>
-          <div class="kufu-chip"><span class="kc-ic">📐</span>日付桁数によるレイアウト崩れ</div>
-          <div class="kufu-chip"><span class="kc-ic">💾</span>端末別localStorage仕様の説明</div>
+          <div class="kufu-chip"><span class="kc-ic">📐</span>会社様式に寄せた表レイアウトの再現</div>
         </div>
       </div>
     </div>
@@ -314,8 +395,19 @@
 
     <div class="proposal-box">
       <div class="pb-icon">🏢</div>
-      <div class="pb-text">サーバー不要・会社PC非改変 → <b>セキュリティ懸念なく全社展開可能</b>。営業車利用者へ横展開し、車両日報の時間を他業務へ。</div>
+      <div class="pb-text">サーバー・DB・AI API 不要 → <b>運用コスト0円・会社PC非改変で全社展開可能</b>。<br>さらに紙で渡せば<b>入力業務そのものを事務職へ委任</b>でき、削減効果は上振れする。</div>
       <div class="pb-dept">提案先：総務部</div>
+    </div>
+  </div>
+
+  <!-- ⑥ これから -->
+  <div class="section">
+    <div class="section-head"><div class="section-num">6</div><h2>これから（発表までの検証計画）</h2></div>
+    <div class="scale-flow">
+      <div class="scale-step"><div class="st-label">8/9</div><div class="st-val">レポート機能 実装完了</div><div class="st-sub">出力・配信・通知</div><div class="scale-arrow-mini">→</div></div>
+      <div class="scale-step"><div class="st-label">1週目</div><div class="st-val">自分で実運用</div><div class="st-sub">隙間時間入力を検証</div><div class="scale-arrow-mini">→</div></div>
+      <div class="scale-step"><div class="st-label">2週目</div><div class="st-val">同僚と併走</div><div class="st-sub">他者の使い勝手を観察</div><div class="scale-arrow-mini">→</div></div>
+      <div class="scale-step"><div class="st-label">8/28</div><div class="st-val">課題改善して発表</div><div class="st-sub">2週間の実体験を添えて</div></div>
     </div>
   </div>
 
