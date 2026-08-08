@@ -40,6 +40,22 @@
   .hero-num .n { font-size:32px; font-weight:800; color:#34d399; line-height:1; }
   .hero-num .l { font-size:10.5px; color:#cbd5e1; margin-top:4px; }
 
+  /* Goal（会社PCの最終フォーマット） */
+  .goal { border:2px solid #1e293b; border-radius:16px; overflow:hidden; margin-bottom:26px; }
+  .goal-bar { background:#0f172a; color:#fff; padding:11px 18px; display:flex; align-items:center;
+    justify-content:space-between; gap:14px; }
+  .goal-bar .g-title { font-size:13.5px; font-weight:800; display:flex; align-items:center; gap:8px; }
+  .goal-bar .g-title .g-ic { font-size:17px; }
+  .goal-bar .g-sub { font-size:10.5px; color:#94a3b8; }
+  .goal img { width:100%; display:block; }
+  .goal-foot { background:#f8fafc; border-top:1px solid #e5e7eb; padding:11px 18px;
+    font-size:11.5px; color:#475569; line-height:1.7; }
+  .goal-foot b { color:#dc2626; }
+  .goal-flow { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:8px; font-size:11px; font-weight:700; }
+  .goal-flow .gf { background:#eff6ff; border:1px solid #bfdbfe; color:#1d4ed8; padding:5px 12px; border-radius:999px; }
+  .goal-flow .gf.end { background:#ecfdf5; border-color:#a7f3d0; color:#059669; }
+  .goal-flow .gf-ar { color:#cbd5e1; }
+
   /* Section */
   .section { margin-bottom:26px; }
   .section-head { display:flex; align-items:center; gap:9px; margin-bottom:12px; }
@@ -204,21 +220,40 @@
     </div>
   </div>
 
+  <!-- ゴール：会社PCの最終フォーマット -->
+  <div class="goal">
+    <div class="goal-bar">
+      <div class="g-title"><span class="g-ic">🎯</span>ゴール：この会社PCの画面を埋めること</div>
+      <div class="g-sub">HCL Notes｜車輌運転日報 兼 運行費用伝票（週1回・提出必須）</div>
+    </div>
+    <img src="./shots/shot_company_form.jpg" alt="会社PCの車輌運転日報 兼 運行費用伝票">
+    <div class="goal-foot">
+      日付・運行先・乗降車時指針・給油量・燃料代・通行料・一時駐車代・洗車ｳｫｯｼｬｰ液・運転前後の時刻…
+      <b>1週間分をまとめて思い出しながら埋める</b>。この会社PCには外部ツールを一切入れられない。
+      <div class="goal-flow">
+        <span class="gf">スマホで記録</span><span class="gf-ar">→</span>
+        <span class="gf">週次レポートに整形</span><span class="gf-ar">→</span>
+        <span class="gf">メールでPCへ</span><span class="gf-ar">→</span>
+        <span class="gf end">見て写すだけ</span>
+      </div>
+    </div>
+  </div>
+
   <!-- ① 作ったもの -->
   <div class="section">
     <div class="section-head"><div class="section-num">1</div><h2>作ったもの</h2></div>
     <div class="shots-grid">
       <div class="shot">
         <img src="./shots/shot_home.png" alt="ホーム画面">
-        <div class="shot-caption">ホーム画面に追加</div>
+        <div class="shot-caption">① スマホのホーム画面から起動</div>
       </div>
       <div class="shot">
         <img src="./shots/shot_week.png" alt="週の一覧">
-        <div class="shot-caption">週別メーター・時刻・タグ</div>
+        <div class="shot-caption">② 隙間時間に記録（距離・時刻・費用）</div>
       </div>
       <div class="shot">
-        <div class="shot-placeholder">週次レポート画面<br>（会社様式に準拠した表）<br>※撮影予定</div>
-        <div class="shot-caption">出力：完成版レポート</div>
+        <img src="./shots/shot_report.png" alt="週次レポート">
+        <div class="shot-caption">③ 会社様式そのままの完成版レポート</div>
       </div>
     </div>
     <div class="chip-row">
