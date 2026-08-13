@@ -187,6 +187,19 @@
   .proposal-box .pb-dept { flex-shrink:0; background:#2563eb; color:#fff; font-size:11px; font-weight:800;
     padding:7px 14px; border-radius:999px; white-space:nowrap; }
 
+  /* 仲間へのメッセージ */
+  .takeaway { background:linear-gradient(135deg,#0f172a,#1e293b); color:#fff;
+    border-radius:18px; padding:24px 28px; margin-top:6px; }
+  .takeaway-head { font-size:15px; font-weight:800; margin-bottom:16px; display:flex; align-items:center; gap:9px; }
+  .takeaway-head .th-ic { font-size:19px; }
+  .tk-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  .tk { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14);
+    border-radius:12px; padding:14px 16px; display:flex; gap:12px; }
+  .tk .tk-n { font-size:19px; font-weight:800; color:#60a5fa; line-height:1.2; flex-shrink:0; }
+  .tk .tk-t { font-size:12.5px; font-weight:800; color:#fff; margin-bottom:4px; line-height:1.5; }
+  .tk .tk-s { font-size:10.5px; color:#94a3b8; line-height:1.65; }
+  .tk-last { margin-top:14px; text-align:center; font-size:13px; font-weight:800; color:#fbbf24; line-height:1.7; }
+
   .footer { margin-top:28px; padding-top:14px; border-top:1px solid #e5e7eb;
     display:flex; justify-content:space-between; align-items:center; font-size:10.5px; color:#9ca3af; }
 
@@ -223,13 +236,14 @@
   <!-- ゴール：会社PCの最終フォーマット -->
   <div class="goal">
     <div class="goal-bar">
-      <div class="g-title"><span class="g-ic">🎯</span>ゴール：この会社PCの画面を埋めること</div>
+      <div class="g-title"><span class="g-ic">🎯</span>ゴール：この伝票が、迷いなく仕上がっている状態</div>
       <div class="g-sub">HCL Notes｜車輌運転日報 兼 運行費用伝票（週1回・提出必須）</div>
     </div>
-    <img src="./shots/shot_company_form.jpg" alt="会社PCの車輌運転日報 兼 運行費用伝票">
+    <img src="./shots/shot_company_form.jpg" alt="実際に処理を終えた車輌運転日報 兼 運行費用伝票">
     <div class="goal-foot">
+      これは<b>実際に先週分を精算した本物の伝票</b>。アプリが出した週次レポートを見ながら、そのまま写しただけ。<br>
       日付・運行先・乗降車時指針・給油量・燃料代・通行料・一時駐車代・洗車ｳｫｯｼｬｰ液・運転前後の時刻…
-      <b>1週間分をまとめて思い出しながら埋める</b>。この会社PCには外部ツールを一切入れられない。
+      かつては<b>1週間分をまとめて思い出しながら埋めていた</b>。しかも会社PCには外部ツールを一切入れられない。
       <div class="goal-flow">
         <span class="gf">スマホで記録</span><span class="gf-ar">→</span>
         <span class="gf">週次レポートに整形</span><span class="gf-ar">→</span>
@@ -271,7 +285,7 @@
 
   <!-- 思考の転換 -->
   <div class="section">
-    <div class="section-head"><div class="section-num">＋</div><h2>設計が変わった瞬間（受講生フィードバック）</h2></div>
+    <div class="section-head"><div class="section-num">＋</div><h2>90点→100点｜8/7、仲間の一言が設計を変えた</h2></div>
     <div class="pivot">
       <div class="pivot-box pivot-stop">
         <div class="p-ic">🚧</div>
@@ -437,12 +451,50 @@
 
   <!-- ⑥ これから -->
   <div class="section">
-    <div class="section-head"><div class="section-num">6</div><h2>これから（発表までの検証計画）</h2></div>
+    <div class="section-head"><div class="section-num">6</div><h2>ここまでの歩みと、これから</h2></div>
     <div class="scale-flow">
+      <div class="scale-step"><div class="st-label">8/7</div><div class="st-val">設計思想を発表</div><div class="st-sub">仲間の指摘で方針転換</div><div class="scale-arrow-mini">→</div></div>
       <div class="scale-step"><div class="st-label">8/9</div><div class="st-val">レポート機能 実装完了</div><div class="st-sub">出力・配信・通知</div><div class="scale-arrow-mini">→</div></div>
-      <div class="scale-step"><div class="st-label">1週目</div><div class="st-val">自分で実運用</div><div class="st-sub">隙間時間入力を検証</div><div class="scale-arrow-mini">→</div></div>
-      <div class="scale-step"><div class="st-label">2週目</div><div class="st-val">同僚と併走</div><div class="st-sub">他者の使い勝手を観察</div><div class="scale-arrow-mini">→</div></div>
-      <div class="scale-step"><div class="st-label">8/28</div><div class="st-val">課題改善して発表</div><div class="st-sub">2週間の実体験を添えて</div></div>
+      <div class="scale-step"><div class="st-label">8/13</div><div class="st-val">実運用で1週目を精算</div><div class="st-sub">冒頭の伝票がその成果</div><div class="scale-arrow-mini">→</div></div>
+      <div class="scale-step"><div class="st-label">8/28</div><div class="st-val">2週分の実体験を添えて発表</div><div class="st-sub">同僚と併走して検証中</div></div>
+    </div>
+  </div>
+
+  <!-- 仲間へ -->
+  <div class="section">
+    <div class="takeaway">
+      <div class="takeaway-head"><span class="th-ic">🎁</span>半年間、一緒に走ってきた仲間へ｜持ち帰ってほしい4つ</div>
+      <div class="tk-grid">
+        <div class="tk">
+          <div class="tk-n">1</div>
+          <div>
+            <div class="tk-t">題材は「毎週うんざりしていること」から選ぶ</div>
+            <div class="tk-s">立派な課題を探しに行かなくていい。自分が逃げたくなる作業こそ、続ける動機が切れない。</div>
+          </div>
+        </div>
+        <div class="tk">
+          <div class="tk-n">2</div>
+          <div>
+            <div class="tk-t">ゴールの絵を、先に手元に置く</div>
+            <div class="tk-s">埋めるべき伝票の実物があったから、逆算で「何を隙間時間に入れておけばいいか」が決まった。</div>
+          </div>
+        </div>
+        <div class="tk">
+          <div class="tk-n">3</div>
+          <div>
+            <div class="tk-t">制約は、諦める理由ではなく設計条件</div>
+            <div class="tk-s">「会社PCに入れられない」で止めず、入れられないまま届ける方法を考えた。制約が形を決めてくれた。</div>
+          </div>
+        </div>
+        <div class="tk">
+          <div class="tk-n">4</div>
+          <div>
+            <div class="tk-t">90点→100点は、他人の目でしか越えられない</div>
+            <div class="tk-s">8/7の設計思想発表。仲間の一言がなければ、私はスマホ画面で満足して終わっていた。</div>
+          </div>
+        </div>
+      </div>
+      <div class="tk-last">作ったのはアプリではなく、「面倒だ」と感じた自分を助ける仕組み。<br>その仕組みは、誰かに渡せる。</div>
     </div>
   </div>
 
