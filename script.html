@@ -4,12 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>メタろぐ｜プレゼン読み上げ原稿（6分）</title>
+<title>メタろぐ｜プレゼン読み上げ原稿</title>
 <style>
   :root{
     --bg:#0f1420; --card:#171e2e; --tx:#e8edf7; --dim:#9aa7bd;
-    --acc:#6ea8ff; --hot:#ffcf5c; --line:#2a3448;
-    --fs:19px;
+    --acc:#6ea8ff; --hot:#ffcf5c; --line:#2a3448; --fs:19px;
   }
   body.light{ --bg:#f6f7fb; --card:#fff; --tx:#161c28; --dim:#5d6779; --acc:#1f5fd0; --hot:#b8730a; --line:#e2e6ef; }
   *{box-sizing:border-box}
@@ -17,22 +16,18 @@
   body{
     background:var(--bg); color:var(--tx);
     font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
-    font-size:var(--fs); line-height:1.95;
-    padding:0 0 120px;
+    font-size:var(--fs); line-height:1.95; padding:0 0 120px;
     -webkit-text-size-adjust:100%;
   }
-
-  /* ── 上部バー ── */
   .bar{
     position:sticky; top:0; z-index:20;
     background:rgba(15,20,32,.92); backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line);
-    padding:10px 14px calc(10px + env(safe-area-inset-top,0px));
-    padding-top:calc(10px + env(safe-area-inset-top,0px));
+    padding:10px 14px; padding-top:calc(10px + env(safe-area-inset-top,0px));
     display:flex; align-items:center; gap:10px;
   }
   body.light .bar{ background:rgba(246,247,251,.94) }
-  .clock{ font-variant-numeric:tabular-nums; font-weight:700; font-size:20px; letter-spacing:.02em; min-width:74px }
+  .clock{ font-variant-numeric:tabular-nums; font-weight:700; font-size:20px; min-width:74px }
   .clock.over{ color:#ff7b7b }
   .bar button{
     background:var(--card); color:var(--tx); border:1px solid var(--line);
@@ -42,15 +37,12 @@
   .bar button:active{ transform:scale(.96) }
   .bar .sp{ flex:1 }
 
-  /* ── 本文 ── */
   .wrap{ padding:16px 16px 0; max-width:760px; margin:0 auto }
   h1{ font-size:20px; line-height:1.5; margin:14px 0 4px }
   .lead{ color:var(--dim); font-size:14px; line-height:1.7; margin-bottom:18px }
 
-  section{
-    background:var(--card); border:1px solid var(--line);
-    border-radius:16px; padding:16px 16px 18px; margin:0 0 16px;
-  }
+  section{ background:var(--card); border:1px solid var(--line);
+    border-radius:16px; padding:16px 16px 18px; margin:0 0 16px }
   .sh{ display:flex; align-items:baseline; gap:10px; margin-bottom:12px; flex-wrap:wrap }
   .sh b{ font-size:17px }
   .sh .t{ color:var(--acc); font-size:13px; font-weight:700; font-variant-numeric:tabular-nums }
@@ -60,10 +52,14 @@
   p:last-child{ margin-bottom:0 }
   strong{ color:var(--hot); font-weight:700 }
   .pause{ color:var(--acc); font-size:13px; font-weight:700 }
-
+  .slidecue{
+    display:inline-block; background:rgba(110,168,255,.14); color:var(--acc);
+    border:1px solid rgba(110,168,255,.35); border-radius:8px;
+    font-size:12px; font-weight:800; padding:2px 8px; margin-bottom:10px;
+    letter-spacing:.06em;
+  }
   .peak{ border-left:3px solid var(--hot); padding-left:12px; margin-left:-2px }
 
-  /* ── メモ ── */
   details{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 16px; margin:0 0 16px }
   details summary{ cursor:pointer; font-weight:700; font-size:16px; list-style:none }
   details summary::-webkit-details-marker{ display:none }
@@ -72,12 +68,12 @@
   details ul{ padding-left:1.2em; margin:14px 0 0 }
   details li{ margin-bottom:.9em; font-size:16px; line-height:1.8; color:var(--dim) }
   details li strong{ color:var(--hot) }
-
   table{ width:100%; border-collapse:collapse; font-size:14px; margin-top:12px }
   th,td{ border-bottom:1px solid var(--line); padding:8px 6px; text-align:left }
   th{ color:var(--dim); font-weight:600 }
   td:last-child,th:last-child{ text-align:right; font-variant-numeric:tabular-nums }
   tr.total td{ font-weight:700; border-bottom:none }
+  a{ color:var(--acc) }
 </style>
 </head>
 <body>
@@ -96,98 +92,103 @@
 <h1>卒業制作プレゼン｜読み上げ原稿</h1>
 <div class="lead">
   メタろぐ／AIドリブンスクール 受講生の仲間へ<br>
-  全体 <b>6分</b>（本文 5分40秒＋余白20秒）・山は2つだけ
+  目安 <b>5分30秒前後</b>・山は2つだけ・青い印はスライドをめくる位置<br>
+  スライド → <a href="http://meterlog-slides.surge.sh">meterlog-slides.surge.sh</a>
 </div>
 
 <!-- ① -->
 <section>
-  <div class="sh"><b>① フック</b><span class="t">25秒</span><span class="cum">〜0:25</span></div>
+  <div class="sh"><b>① フック</b><span class="t">約36秒</span><span class="cum">〜0:36</span></div>
+  <div class="slidecue">▶ P2　机の引き出しに</div>
   <p>机の引き出しに、そっとしまって、帰ったんです。</p>
-  <p>先月、7月10日。私の会社で、営業全員にiPhoneが配られました。本社から、郵送で。ようやく、ガラケーが終わりました。</p>
-  <p>使えるようになったのは、メールだけです。パソコンで受けているメールが、読める。それだけ。<span class="pause">〈一拍〉</span></p>
+  <p>先月、7月10日。私の会社で、営業全員にiPhoneが配られました。本社から、郵送で。ようやく、ガラケー時代が終わりました。</p>
+  <div class="slidecue">▶ P3　メールだけ。</div>
+  <p>使えるようになったのは、メールだけです。<span class="pause">〈一拍〉</span></p>
   <p>社内のシステムは、覗けない。アプリは、一つも入れられない。</p>
   <p>その日、箱を開けてすぐ使い始めたのは、営業所でただ一人、20代の若手社員でした。残りの営業マンは、全員。そっと机の引き出しにしまって、帰りました。</p>
 </section>
 
 <!-- ② -->
 <section>
-  <div class="sh"><b>② 背景</b><span class="t">25秒</span><span class="cum">〜0:50</span><span class="cum">畳みかけて速く</span></div>
-  <p>私が勤めているのは、創業120年の商社です。社員は500人。同族経営で、プロパーから上がった社長と会長が引っ張っています。</p>
-  <p>役員が第一に背負っているのは、「会社を倒産させず、500人を路頭に迷わせない」こと。だから、石橋は必ず叩く。一番手には、飛び込まない。情報セキュリティの感度は、異常に高い。</p>
-  <p><strong>AIを導入しよう、なんて——社内で囁く人すら、いません。</strong></p>
-  <p>管理職は、今日も紙にハンコを押しています。会社に戻らないと、仕事が進まない。そういう環境です。</p>
+  <div class="sh"><b>② 背景</b><span class="t">約23秒</span><span class="cum">〜1:00</span><span class="cum">畳みかけて速く</span></div>
+  <div class="slidecue">▶ P4　ささやく人すら、いない</div>
+  <p>私が勤めているのは、創業125年の商社です。社員は550人。</p>
+  <p>「会社を潰さない」ことが、何よりも大事な会社です。だから、石橋は必ず叩く。情報セキュリティの感度は、異常に高い。</p>
+  <p><strong>AIを導入しよう、なんて——社内でささやく人すら、いません。</strong></p>
+  <p>管理職は、今日も紙にハンコを押しています。</p>
 </section>
 
 <!-- ③ -->
 <section>
-  <div class="sh"><b>③ 橋渡し</b><span class="t">10秒</span><span class="cum">〜1:00</span></div>
-  <p>私が、この学校の門を叩いた理由は、ここにあります。</p>
-  <p>この環境のままでも、今ある仕事を少しでも減らせないか。空いた時間で、新しい仕事を作る。人を育てる。早く帰る。そういう循環を、自分の手で作れないか。</p>
+  <div class="sh"><b>③ 橋渡し</b><span class="t">約9秒</span><span class="cum">〜1:09</span></div>
+  <p>それでも、今ある仕事を減らして、空いた時間を、別のことに使いたい。</p>
   <p>——今日は、その話をします。</p>
 </section>
 
 <!-- ④ -->
 <section>
-  <div class="sh"><b>④ 結論</b><span class="t">40秒</span><span class="cum">〜1:40</span><span class="cum">淡々と、速く</span></div>
-  <p>作ったのは、「メタろぐ」というアプリです。スマホで開く、ただのWebページです。インストールは、要りません。</p>
+  <div class="sh"><b>④ 結論</b><span class="t">約54秒</span><span class="cum">〜2:03</span><span class="cum">淡々と、速く</span></div>
+  <div class="slidecue">▶ P5　伝票の写真</div>
+  <p>社用車を使う営業は、週に一度、「車輌運転日報 兼 運行費用伝票」を、会社のパソコンで作ります。</p>
+  <p>その日ごとの、乗ったときと、降りたときのメーター。それと、かかった費用。1週間分を並べて、合計を出す。</p>
+  <p>私が作ったのが、「メタろぐ」です。スマホで開く、ただのWebページ。インストールは、要りません。</p>
   <p>やることは、一つだけ。車を降りた、その場で。メーターの数字を打つ。それだけです。</p>
-  <p>週末になると、会社の伝票とそっくり同じ形のレポートが、勝手にできあがっています。合計も、走行距離も、全部計算済みです。それが、メールで自分のパソコンに届く。</p>
+  <p>週末には、<strong>その伝票とそっくり同じ形のレポートが、勝手にできあがっています。</strong>合計も、距離も、計算済み。それが、メールで自分のパソコンに届く。</p>
+  <div class="slidecue">▶ P6　10分 → 3分</div>
   <p>会社のパソコンでやることは、見て、写すだけ。</p>
   <p><strong>7分から10分かかっていた作業が、3分になりました。</strong></p>
 </section>
 
 <!-- ⑤ -->
 <section class="peak">
-  <div class="sh"><b>⑤ なぜ</b><span class="t">60秒</span><span class="cum">〜2:40</span><span class="cum">🔺 山①・悔しさ</span></div>
-  <p>なぜ、これを作ったか。</p>
+  <div class="sh"><b>⑤ なぜ</b><span class="t">約47秒</span><span class="cum">〜2:50</span><span class="cum">🔺 山①・悔しさ</span></div>
+  <div class="slidecue">▶ P7　「くそっ」</div>
   <p>月末でした。伝票を書こうとして、手が止まったんです。先月の、ある日。車を降りたときのメーターを、控えていなかった。</p>
   <p>心の中で、こう言いました。<strong>「くそっ」。</strong></p>
+  <div class="slidecue">▶ P8　5分</div>
   <p>そのあと私は、席を立って、駐車場まで歩いて、車のメーターを、見に行きました。往復5分です。<span class="pause">〈一拍〉</span> <strong>数字、ひとつのために。</strong></p>
-  <p>これが、1ヶ月分たまっている。日付を追って、前の日との差を引いて、距離を出す。給油のレシートを探す。駐車場代を、思い出す。</p>
-  <p>厄介なのは、かかる時間そのものではありませんでした。<br>
-  面倒だから、後回しにする。<br>
-  後回しにするから、思い出せない。<br>
-  思い出せないから、もっと面倒になる。<br>
-  この輪から、抜けられない。</p>
+  <div class="slidecue">▶ P9　後回しの輪</div>
+  <p>厄介なのは、かかる時間そのものではありませんでした。</p>
+  <p>面倒だから、後回しにする。<br>後回しにするから、思い出せない。<br>思い出せないから、もっと面倒になる。</p>
   <p>そして年度末。私の下のメンバー3人から、1ヶ月分たまった伝票が、それぞれ出てきました。</p>
   <p><span class="pause">〈ゆっくり〉</span> ——同じことが、私の周りでも、起きていたんです。</p>
 </section>
 
 <!-- ⑥ -->
 <section class="peak">
-  <div class="sh"><b>⑥ 転機</b><span class="t">80秒</span><span class="cum">〜4:00</span><span class="cum">🔺 山②・気づき</span></div>
-  <p>ここまでの話には、続きがあります。</p>
+  <div class="sh"><b>⑥ 転機</b><span class="t">約82秒</span><span class="cum">〜4:12</span><span class="cum">🔺 山②・気づき</span></div>
+  <div class="slidecue">▶ P10　8月7日・前と後</div>
   <p>実はこのアプリ、<strong>先週まで、スマホの画面までで終わっていました。</strong></p>
-  <p>私はずっと、自分にこう言っていたんです。「会社のPCにはつながらないんだから、スマホで見られれば、それで十分だ」。</p>
-  <p>諦めていたわけじゃありません。<strong>疑ってすら、いませんでした。</strong>つながらないのは当たり前。だからアプリも、スマホで見られればいいや。そのくらいの感覚でした。</p>
+  <p>私はずっと、自分にこう言っていました。「会社のPCにはつながらないんだから、スマホで見られれば十分だ」。</p>
+  <p>諦めていたわけじゃありません。<strong>疑ってすら、いませんでした。</strong></p>
   <p>8月7日。この場所で、設計思想の発表をしました。正直に言うと、私は——<strong>胸を張って発表していませんでした。</strong></p>
-  <p>その日、二つ、言葉をもらいました。</p>
-  <p>一つは、やまきょうさんから。「最後は、日報の出力までできると、より良いですよね」。</p>
-  <p><span class="pause">〈一拍〉</span> もう一つは、<strong>私に向けられた言葉ではありませんでした。</strong></p>
-  <p>しょうたさんが、ちゅーさんの発表にフィードバックしていたんです。<br>
-  「セキュリティが厳しい中でも、そこで止まらずに、<strong>どうしたら結果を受け取れるようにできるか</strong>を考え抜いているのが素晴らしい」。</p>
+  <p>その日、やまきょうさんから言われました。「最後は、日報の出力までできると、より良いですよね」。</p>
+  <p>そしてもう一つは、<span class="pause">〈一拍〉</span> <strong>私に向けられた言葉ではありませんでした。</strong></p>
+  <p>しょうたさんが、ちゅーさんの発表に、こう言っていたんです。<br>「セキュリティが厳しい中でも、そこで止まらずに、<strong>どうしたら結果を受け取れるか</strong>を考え抜いているのが素晴らしい」。</p>
   <p>横で聞いていて、はっとしました。</p>
+  <div class="slidecue">▶ P11　私の思考でした</div>
   <p>止まっていたのは、会社じゃない。<strong>私の思考でした。</strong></p>
-  <p>——そこから、作り直しました。会社が唯一、許してくれたもの。メールです。レポートのデータを、そのままURLに埋め込んで、自分あてにメールで送る。会社のPCで、そのリンクを開く。伝票が、そのまま出てくる。</p>
-  <p>紙に印刷もできるようにしました。レシートと一緒に事務の方へ渡せば、打ち込みごと、お願いできます。<strong>自分の仕事が、一つ減ります。</strong></p>
+  <div class="slidecue">▶ P12　しくみ 4ステップ</div>
+  <p>——そこから、作り直しました。使ったのは、会社が唯一、許してくれたもの。メールです。レポートをまるごとURLに埋め込んで、自分あてに送る。リンクを開けば、伝票が、そのまま出てきます。</p>
+  <div class="slidecue">▶ P13　画面</div>
   <p>制約は、諦める理由ではなく、設計の条件でした。</p>
 </section>
 
 <!-- ⑦ -->
 <section>
-  <div class="sh"><b>⑦ どうなる／仲間へ</b><span class="t">100秒</span><span class="cum">〜5:40</span></div>
-  <p>いま、どうなっているか。</p>
-  <p>先週分の伝票は、もう精算が終わっています。移動中に打ち終わっていたので、会社のPCの前に座っていた時間は、3分でした。月末に、1ヶ月分を思い出す作業は、なくなりました。</p>
-  <p>正直に、数字のことも言っておきます。全社500人で計算すれば、大きな数字は作れます。でも、<strong>実際に測れているのは、私ひとり分です。</strong>だから今日は、そこを主役にしませんでした。来週から、メンバーにも使ってもらって、確かめます。</p>
+  <div class="sh"><b>⑦ どうなる／仲間へ</b><span class="t">約78秒</span><span class="cum">〜5:30</span></div>
+  <div class="slidecue">▶ P14　私ひとり分です</div>
+  <p>正直に言うと、<strong>実際に測れているのは、私ひとり分です。</strong>550人で計算すれば大きな数字は作れますが、今日は、そこを主役にしませんでした。</p>
   <p>——ここからが、今日いちばん伝えたいことです。</p>
-  <p>私の会社は、たぶんこの中でいちばん、テクノロジーから遠いところにいます。サーバーは自社。アプリは入れられない。AIの話をする人は、ひとりもいません。</p>
-  <p>その環境でも、作れました。特別なことは、何もしていません。<strong>会社が許してくれた、たった一本の通り道を、使い切っただけです。</strong></p>
+  <div class="slidecue">▶ P15　止まった思考</div>
+  <p>私の会社は、たぶんこの中でいちばん、テクノロジーから遠い。その環境でも、作れました。<strong>会社が許してくれた、たった一本の通り道を、使い切っただけです。</strong></p>
   <p>だからもし、「うちの会社では無理だ」と思っている人がいたら。無理なのは会社じゃなくて、<strong>そこで止まった思考かもしれません。</strong>8月7日の私が、まさにそうでした。</p>
-  <p>そして、もうひとつ。</p>
-  <p>私を変えたのは、私に向けられた言葉ではありませんでした。しょうたさんが、ちゅーさんに話していた言葉です。やまきょうさんの、ひとことでした。</p>
+  <div class="slidecue">▶ P16　誰かの何かを変えています</div>
+  <p>そして、もうひとつ。私を変えたのは、私に向けられた言葉ではありませんでした。</p>
   <p><span class="pause">〈顔を上げる・原稿を見ない〉</span><br>
   <strong>皆さんは、たぶん気づかないうちに、誰かの何かを変えています。</strong>今日この場でも、きっと起きています。</p>
   <p>だから、卒業してからも。お互いの作ったものに、ひとこと言い合える関係でいさせてください。</p>
+  <div class="slidecue">▶ P17　締め</div>
   <p><span class="pause">〈ゆっくり・急がない〉</span><br>
   私が作ったのは、アプリではありませんでした。<strong>「面倒だ」と感じた自分を、助ける仕組みです。</strong>そしてその仕組みは、誰かに渡せます。</p>
   <p>ありがとうございました。</p>
@@ -197,17 +198,16 @@
   <summary>読むときのメモ</summary>
   <ul>
     <li>一行目は<strong>主語を言わずに始める</strong>。「何の話だ？」を15秒で回収する</li>
-    <li>「それだけ。」の後で<strong>一拍おく</strong></li>
-    <li>「使えるのは、メールだけ」は<strong>伏線</strong>。⑥で回収される。ここで種明かししない</li>
+    <li>「使えるようになったのは、メールだけです」は<strong>伏線</strong>。⑥で回収される。種明かししない</li>
     <li>20代の下りは笑いが起きたら受け止めてよい。「残りの営業マンは、全員」で温度を下げる</li>
     <li>②背景は<strong>畳みかけて速く</strong>。ここで止まると本編が痩せる</li>
-    <li>「囁く人すら、いません」は<strong>ゆっくり、はっきり</strong>。この会場だから効く</li>
-    <li>④は<strong>淡々と、速く</strong>。感情を込めない。事実だけ置く</li>
+    <li>「ささやく人すら、いません」は<strong>ゆっくり、はっきり</strong>。この会場だから効く</li>
+    <li>④の伝票の説明は<strong>説明だとバレないくらい速く</strong>。ここで飽きさせない</li>
     <li>⑤の「くそっ」は<strong>声に出して言う</strong></li>
     <li>「往復5分です」のあと一拍おいてから「数字、ひとつのために」</li>
-    <li>「面倒だから／後回しにするから／思い出せないから」の三連は<strong>だんだん速く</strong></li>
-    <li>「起きていたんです」で自分から他人へ広がる。ここが賭け金。<strong>ゆっくり</strong></li>
-    <li>⑥「胸を張って発表していませんでした」は<strong>言い訳せず、さらっと</strong>。照れると嘘っぽくなる</li>
+    <li>三連（面倒だから／後回しにするから／思い出せないから）は<strong>だんだん速く</strong></li>
+    <li>「起きていたんです」で自分から他人へ広がる。賭け金。<strong>ゆっくり</strong></li>
+    <li>⑥「胸を張って発表していませんでした」は<strong>言い訳せず、さらっと</strong></li>
     <li>「私に向けられた言葉ではありませんでした」の前で<strong>一拍</strong>。ここが一番刺さる</li>
     <li>しょうたさんの言葉は<strong>引用として少し丁寧に</strong>。自分の言葉と区別をつける</li>
     <li>「会社が唯一、許してくれたもの。メールです」で伏線回収。<strong>説明を足さない</strong></li>
@@ -219,20 +219,20 @@
 </details>
 
 <details>
-  <summary>全体の尺と、山</summary>
+  <summary>尺と、山</summary>
   <table>
     <tr><th>パート</th><th>内容</th><th>尺</th></tr>
-    <tr><td>①</td><td>引き出しにしまって帰った</td><td>0:25</td></tr>
-    <tr><td>②</td><td>120年・500人・囁く人すらいない</td><td>0:25</td></tr>
-    <tr><td>③</td><td>今日は、その話をします</td><td>0:10</td></tr>
-    <tr><td>④</td><td>メタろぐ／7〜10分が3分に</td><td>0:40</td></tr>
-    <tr><td>⑤</td><td>「くそっ」／往復5分／後回しの輪</td><td>1:00</td></tr>
-    <tr><td>⑥</td><td>8/7、自分宛じゃない言葉で変わった</td><td>1:20</td></tr>
-    <tr><td>⑦</td><td>数字・止まるな・言い合える関係</td><td>1:40</td></tr>
-    <tr class="total"><td></td><td>合計</td><td>5:40</td></tr>
+    <tr><td>①</td><td>引き出しにしまって帰った</td><td>0:36</td></tr>
+    <tr><td>②</td><td>125年・550人・ささやく人すらいない</td><td>0:23</td></tr>
+    <tr><td>③</td><td>今日は、その話をします</td><td>0:09</td></tr>
+    <tr><td>④</td><td>伝票の説明／10分が3分に</td><td>0:54</td></tr>
+    <tr><td>⑤</td><td>「くそっ」／往復5分／後回しの輪</td><td>0:47</td></tr>
+    <tr><td>⑥</td><td>8/7、自分宛じゃない言葉で変わった</td><td>1:22</td></tr>
+    <tr><td>⑦</td><td>ひとり分・止まるな・言い合える関係</td><td>1:18</td></tr>
+    <tr class="total"><td></td><td>合計</td><td>約5:30</td></tr>
   </table>
   <ul style="margin-top:16px">
-    <li>残り20秒は、笑いが起きたとき・間を取るための余白。<strong>埋めない</strong></li>
+    <li>残りは、笑いが起きたとき・間を取るための余白。<strong>埋めない</strong></li>
     <li>山は2つだけ：⑤「くそっ」＝悔しさ／⑥「止まっていたのは、私の思考でした」＝気づき</li>
     <li>他はすべて、この2つを立たせるための平地。<strong>強く読まない</strong></li>
   </ul>
@@ -241,47 +241,32 @@
 </div>
 
 <script>
-// ── ストップウォッチ ──
-let t0 = null, acc = 0, tick = null;
-const clock = document.getElementById('clock');
-const run = document.getElementById('run');
-function fmt(ms){
-  const s = Math.floor(ms/1000);
-  return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
-}
-function paint(){
-  const ms = acc + (t0 ? Date.now()-t0 : 0);
-  clock.textContent = fmt(ms);
-  clock.classList.toggle('over', ms > 360000);
-}
-run.onclick = () => {
-  if (t0){ acc += Date.now()-t0; t0 = null; clearInterval(tick); run.textContent='▶ 再開'; }
-  else { t0 = Date.now(); tick = setInterval(paint, 200); run.textContent='⏸ 停止'; }
+let t0=null, acc=0, tick=null;
+const clock=document.getElementById('clock'), run=document.getElementById('run');
+const fmt=ms=>{const s=Math.floor(ms/1000);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+function paint(){const ms=acc+(t0?Date.now()-t0:0);clock.textContent=fmt(ms);clock.classList.toggle('over',ms>360000)}
+run.onclick=()=>{
+  if(t0){acc+=Date.now()-t0;t0=null;clearInterval(tick);run.textContent='▶ 再開';}
+  else{t0=Date.now();tick=setInterval(paint,200);run.textContent='⏸ 停止';}
   paint();
 };
-document.getElementById('rst').onclick = () => {
-  t0 = null; acc = 0; clearInterval(tick); run.textContent='▶ 開始'; paint();
-};
+document.getElementById('rst').onclick=()=>{t0=null;acc=0;clearInterval(tick);run.textContent='▶ 開始';paint()};
 
-// ── 文字サイズ ──
-const sizes = [17,19,21,24];
-let si = +(localStorage.getItem('scr-fs') ?? 1);
-function applyFS(){ document.documentElement.style.setProperty('--fs', sizes[si]+'px'); localStorage.setItem('scr-fs', si); }
-document.getElementById('fs').onclick = () => { si = (si+1)%sizes.length; applyFS(); };
+const sizes=[17,19,21,24];
+let si=+(localStorage.getItem('scr-fs')??1);
+const applyFS=()=>{document.documentElement.style.setProperty('--fs',sizes[si]+'px');localStorage.setItem('scr-fs',si)};
+document.getElementById('fs').onclick=()=>{si=(si+1)%sizes.length;applyFS()};
 applyFS();
 
-// ── テーマ ──
-if (localStorage.getItem('scr-th') === 'light') document.body.classList.add('light');
-document.getElementById('th').onclick = () => {
+if(localStorage.getItem('scr-th')==='light') document.body.classList.add('light');
+document.getElementById('th').onclick=()=>{
   document.body.classList.toggle('light');
-  localStorage.setItem('scr-th', document.body.classList.contains('light') ? 'light' : 'dark');
+  localStorage.setItem('scr-th',document.body.classList.contains('light')?'light':'dark');
 };
 
-// ── 画面を消さない（対応端末のみ）──
-if ('wakeLock' in navigator) {
-  const req = () => navigator.wakeLock.request('screen').catch(()=>{});
-  req();
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) req(); });
+if('wakeLock' in navigator){
+  const req=()=>navigator.wakeLock.request('screen').catch(()=>{});
+  req(); document.addEventListener('visibilitychange',()=>{if(!document.hidden)req()});
 }
 </script>
 </body>
