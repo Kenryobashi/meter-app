@@ -67,8 +67,12 @@
   .vs .big{font-size:34px; font-weight:800; line-height:1.5; margin-top:14px}
   .vs .mid{font-size:44px; color:var(--dim)}
 
-  .shot{display:flex; gap:38px; align-items:center; justify-content:center; margin-top:26px}
-  .shot img{border-radius:14px; box-shadow:0 18px 48px rgba(10,20,40,.22); max-height:430px}
+  .shot{display:flex; gap:30px; align-items:center; justify-content:center; margin-top:14px}
+  .shot figure{display:flex; flex-direction:column; align-items:center; gap:14px}
+  .shot img{border-radius:12px; box-shadow:0 16px 44px rgba(10,20,40,.20);
+    max-height:452px; max-width:490px; border:1px solid #dfe5ee}
+  .shot figcaption{font-size:22px; font-weight:700; color:#5b6779}
+  .shot .ar2{font-size:48px; color:var(--dim); align-self:center; margin-bottom:34px}
   .full{display:flex; justify-content:center; margin-top:24px}
   .full img{max-height:440px; border-radius:12px; box-shadow:0 18px 48px rgba(10,20,40,.25)}
 
@@ -230,8 +234,15 @@
 <section class="slide">
   <div class="lbl">入力は増やさない。出力だけ、完成版に近づける</div>
   <div class="shot">
-    <img src="./shots/shot_week.png" alt="入力画面">
-    <img src="./shots/shot_report.png" alt="週次レポート">
+    <figure>
+      <img src="./shots/shot_week_list.png" alt="スマホでの入力画面">
+      <figcaption>打つのは、メーターの数字だけ</figcaption>
+    </figure>
+    <div class="ar2">→</div>
+    <figure>
+      <img src="./shots/shot_report_table.png" alt="週次レポート">
+      <figcaption>週末には、伝票の形になっている</figcaption>
+    </figure>
   </div>
   <div class="pg">13</div>
 </section>
