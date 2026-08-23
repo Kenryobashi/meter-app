@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>メタろぐ｜想定質問と答え</title>
+<style>
+  :root{
+    --bg:#0f1420; --card:#171e2e; --tx:#e8edf7; --dim:#9aa7bd;
+    --acc:#6ea8ff; --hot:#ffcf5c; --line:#2a3448; --fs:19px;
+  }
+  body.light{ --bg:#f6f7fb; --card:#fff; --tx:#161c28; --dim:#5d6779; --acc:#1f5fd0; --hot:#b8730a; --line:#e2e6ef; }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--tx);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    font-size:var(--fs); line-height:1.95; padding:0 0 120px;
+    -webkit-text-size-adjust:100%;
+  }
+  .bar{
+    position:sticky; top:0; z-index:20;
+    background:rgba(15,20,32,.92); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    padding:10px 14px; padding-top:calc(10px + env(safe-area-inset-top,0px));
+    display:flex; align-items:center; gap:10px;
+  }
+  body.light .bar{ background:rgba(246,247,251,.94) }
+  .clock{ font-variant-numeric:tabular-nums; font-weight:700; font-size:20px; min-width:74px }
+  .clock.over{ color:#ff7b7b }
+  .bar button{
+    background:var(--card); color:var(--tx); border:1px solid var(--line);
+    border-radius:10px; padding:8px 12px; font-size:14px; font-weight:600;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .bar button:active{ transform:scale(.96) }
+  .bar .sp{ flex:1 }
+
+  .wrap{ padding:16px 16px 0; max-width:760px; margin:0 auto }
+  h1{ font-size:20px; line-height:1.5; margin:14px 0 4px }
+  .lead{ color:var(--dim); font-size:14px; line-height:1.7; margin-bottom:18px }
+
+  section{ background:var(--card); border:1px solid var(--line);
+    border-radius:16px; padding:16px 16px 18px; margin:0 0 16px }
+  .sh{ display:flex; align-items:baseline; gap:10px; margin-bottom:12px; flex-wrap:wrap }
+  .sh b{ font-size:17px }
+  .sh .t{ color:var(--acc); font-size:13px; font-weight:700; font-variant-numeric:tabular-nums }
+  .sh .cum{ color:var(--dim); font-size:12px }
+
+  p{ margin:0 0 1.05em }
+  p:last-child{ margin-bottom:0 }
+  strong{ color:var(--hot); font-weight:700 }
+  .pause{ color:var(--acc); font-size:13px; font-weight:700 }
+  .slidecue{
+    display:inline-block; background:rgba(110,168,255,.14); color:var(--acc);
+    border:1px solid rgba(110,168,255,.35); border-radius:8px;
+    font-size:12px; font-weight:800; padding:2px 8px; margin-bottom:10px;
+    letter-spacing:.06em;
+  }
+  .peak{ border-left:3px solid var(--hot); padding-left:12px; margin-left:-2px }
+
+  details{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 16px; margin:0 0 16px }
+  details summary{ cursor:pointer; font-weight:700; font-size:16px; list-style:none }
+  details summary::-webkit-details-marker{ display:none }
+  details summary::before{ content:"▶ "; color:var(--acc); font-size:12px }
+  details[open] summary::before{ content:"▼ " }
+  details ul{ padding-left:1.2em; margin:14px 0 0 }
+  details li{ margin-bottom:.9em; font-size:16px; line-height:1.8; color:var(--dim) }
+  details li strong{ color:var(--hot) }
+  table{ width:100%; border-collapse:collapse; font-size:14px; margin-top:12px }
+  th,td{ border-bottom:1px solid var(--line); padding:8px 6px; text-align:left }
+  th{ color:var(--dim); font-weight:600 }
+  td:last-child,th:last-child{ text-align:right; font-variant-numeric:tabular-nums }
+  tr.total td{ font-weight:700; border-bottom:none }
+  a{ color:var(--acc) }
+</style>
+<style>
+  .q{ font-size:19px; font-weight:800; color:var(--tx); margin:0 0 14px; line-height:1.6 }
+  .qn{ display:inline-block; background:var(--acc); color:#fff; font-size:12px; font-weight:800;
+       padding:2px 9px; border-radius:999px; margin-right:8px; vertical-align:2px }
+  .a{ border-left:3px solid var(--acc); padding-left:14px; margin:0 0 14px }
+  .why{ background:rgba(255,255,255,.04); border:1px dashed var(--line); border-radius:12px;
+        padding:12px 14px; font-size:15px; line-height:1.85; color:var(--dim) }
+  body.light .why{ background:rgba(0,0,0,.03) }
+  .why b{ color:var(--tx) }
+  .core{ background:rgba(255,207,92,.10); border:1px solid rgba(255,207,92,.35);
+         border-radius:14px; padding:14px 16px; margin:0 0 18px; font-size:16px; line-height:1.85 }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="clock" id="clock" style="font-size:15px; min-width:auto">想定Q&amp;A</div>
+  <div class="sp"></div>
+  <button id="fs">A±</button>
+  <button id="th">◐</button>
+</div>
+
+<div class="wrap">
+
+<h1>卒業制作プレゼン｜質疑応答書</h1>
+<div class="lead">
+  メタろぐ／2026年8月28日<br>
+  <a href="http://meterlog-script.surge.sh">読み上げ原稿</a>　／　
+  <a href="http://meterlog-slides.surge.sh">スライド</a>　／　
+  <a href="https://kenryobashi.github.io/meter-app/">メタろぐ本体</a>
+</div>
+
+<div class="core">
+  <b>この5問の答えは、すべて同じ一点に着地する。</b><br>
+  ——<strong>制約に合わせて削ったのではなく、制約が設計を決めた。引き算で作った。</strong><br>
+  どこから聞かれても、ここに戻ってくればいい。
+</div>
+
+<!-- Q1 -->
+<section>
+  <p class="q"><span class="qn">Q1</span>結局、AIはどこで使ったんですか？</p>
+  <div class="a">
+    <p>全部です。<span class="pause">〈一拍〉</span></p>
+    <p>私はコードが書けません。書いたのは、AIです。</p>
+    <p>でも、いちばん時間を使ったのは、コードを書かせるところじゃありませんでした。<strong>「何を作らないか」を決めるところ</strong>です。</p>
+    <p>ゴールのイメージを話して、設計を相談して。AIに逆質問させて、自分の考えの穴を突いてもらう。認証をどうするか、誰まで使えるようにするか、他の人が自分の環境でも使えるようにするにはどうするか。そこを、何度も往復しました。</p>
+    <p>会社の伝票とそっくり同じ形のレポート、あのHTMLも、AIに作らせています。</p>
+    <p>——半年間で私が身につけたのは、<strong>AIに書かせる技術ではなく、AIと決める技術</strong>でした。</p>
+  </div>
+  <div class="why">
+    <b>狙い：</b>「全部です」で正面から受けてから、論点を一段上げる。コードを書かせたことは1秒で認め、時間を使ったのは判断のほうだったと移す。本編の「止まっていたのは私の思考でした」と同じ構造になる。<br>
+    <b>注意：</b>「コードが書けません」を隠さず先に言う。<b>弱みを先に出した人の言葉は、そのあと強くなる。</b>最後の一行はこの場の全員が半年やってきたことの言語化でもある。
+  </div>
+</section>
+
+<!-- Q2 -->
+<section>
+  <p class="q"><span class="qn">Q2</span>セキュリティが厳しい会社なのに、URLに業務データを埋め込んで大丈夫なんですか？</p>
+  <div class="a">
+    <p>いい質問です。<span class="pause">〈一拍〉</span> 私も、そこを最後まで考えました。</p>
+    <p>まず、事実から。<strong>このアプリには、サーバーがありません。データベースもありません。</strong>データは、私のスマホの中だけにあります。どこにも送信していない。</p>
+    <p>週末に送るメールは、<strong>自分の会社のアドレス宛て</strong>です。外には出ません。</p>
+    <p>そのうえで——<strong>伝票の中で、いちばん出したくない情報は、訪問先の名前でした。</strong></p>
+    <p>だから、<strong>打たない設計にしました。</strong>運行先はあらかじめ「×××社他」と置いてあって、顧客名そのものは、どこにも入りません。</p>
+    <p><span class="pause">〈少し間をおいて〉</span><br>
+    ——ここも、同じでした。<strong>制約に合わせて機能を削ったのではなく、制約が、設計を決めてくれた。</strong></p>
+  </div>
+  <div class="why">
+    <b>狙い：</b>これは技術の質問に見えて「あなたは会社を裏切っていないか」という問い。<b>先に事実、あとに思想。</b>逆にすると言い訳に聞こえる。<br>
+    <b>核：</b>「打たない設計にしました」＝「守っている」ではなく<b>「そもそも持っていない」</b>。持っていないものは漏れない。セキュリティの議論では最強の形。
+  </div>
+</section>
+
+<!-- Q2追撃 -->
+<section>
+  <p class="q"><span class="qn">Q2+</span>（追撃）会社の正式なシステムじゃないですよね？</p>
+  <div class="a">
+    <p>はい。<strong>これは個人の手元のメモ帳と同じ位置づけです。</strong>紙のメモ帳に控えるのと、やっていることは変わりません。むしろ、紙より失くしません。</p>
+  </div>
+  <div class="why">
+    <b>狙い：</b>「システムを勝手に作った人」ではなく<b>「メモの取り方を工夫した人」</b>として立つ。情シスに聞かれても同じ答えができる、というのが強み。
+  </div>
+</section>
+
+<!-- Q3 -->
+<section>
+  <p class="q"><span class="qn">Q3</span>他の営業の人にも使ってもらう予定はありますか？</p>
+  <div class="a">
+    <p>もう、渡しています。</p>
+    <p>私自身は、試作の段階から<strong>1ヶ月使い続けました。</strong>そのうえで、営業所のメンバーに共有して——<strong>便利だと言って、使ってくれている人がいます。</strong></p>
+    <p><span class="pause">〈一拍〉</span></p>
+    <p>さっき「私ひとりの実測です」と言ったのは、<strong>時間を測ったのが私だけ</strong>、という意味です。使っている人は、私だけじゃありません。</p>
+    <p>でも、<strong>「何人が何分速くなりました」とは、まだ言えない。</strong>そこは、正直に置いておきたかった。</p>
+    <p>私がうれしかったのは、数字じゃありませんでした。<strong>渡したら、使ってくれた。</strong>それだけです。</p>
+    <p>——<strong>仕組みは、誰かに渡せる。</strong>これは、もう確かめられました。</p>
+  </div>
+  <div class="why">
+    <b>狙い：</b>「ひとりだけですよね＝効果は証明されてませんよね」を、冒頭の「もう、渡しています」で最初の一言でひっくり返す。<br>
+    <b>核：</b>「実測」と「利用」を切り分ける。切り分けた瞬間、<b>この人は言葉を正確に選んでいる</b>という信頼に変わる。締めの「その仕組みは、誰かに渡せます」の根拠提示になり、質疑がプレゼンを完成させる。<br>
+    <b>注意：</b>人数はぼかしたまま。聞かれてから実数を答えれば十分。
+  </div>
+</section>
+
+<!-- Q4 -->
+<section>
+  <p class="q"><span class="qn">Q4</span>なぜ会社の正式なシステムとして提案しないんですか？</p>
+  <div class="a">
+    <p>今は、しません。<span class="pause">〈一拍〉</span></p>
+    <p><strong>提案が通る会社ではない</strong>からではなく、<strong>まだ提案する段階じゃない</strong>からです。</p>
+    <p>私の会社で新しいものを通すときに、いちばん強いのは、企画書じゃありません。<strong>「もう使っている人がいます」</strong>です。</p>
+    <p>それを、今つくっている最中です。</p>
+    <p>——石橋を叩く会社なら、<strong>先に渡って見せればいい。</strong>そう思っています。</p>
+  </div>
+  <div class="why">
+    <b>狙い：</b>最後の一行が①②の「石橋を叩く会社」の伏線回収。批判ではなく、<b>その会社のやり方に合わせて勝ちにいく</b>立ち位置。会社を悪く言わずに終われるのが重要。
+  </div>
+</section>
+
+<!-- Q5 -->
+<section>
+  <p class="q"><span class="qn">Q5</span>どれくらいの期間で作ったんですか？／技術的にいちばん苦労したのは？</p>
+  <div class="a">
+    <p>作ったのは、スクールが始まって<strong>5ヶ月目の7月</strong>です。</p>
+    <p>かかった時間は——<strong>3、4時間です。</strong></p>
+    <p><span class="pause">〈一拍。笑いが起きたら受け止める〉</span></p>
+    <p>でも、その3時間は、<strong>5ヶ月目の3時間</strong>でした。1ヶ月目の私には、3日かけても作れなかったと思います。</p>
+    <p>技術で詰まったところは、正直、ほとんどありません。レポートのHTMLと、URLへの埋め込みくらいです。</p>
+    <p>いちばん時間を使ったのは——<strong>機能を増やさないことでした。</strong></p>
+    <p>作っていると、思いつくんです。地図と連携させよう。写真からレシートを読み取らせよう。集計をグラフにしよう。</p>
+    <p>全部、やめました。</p>
+    <p><strong>機能をひとつ足すたびに、守るものが増える。</strong>私の会社では、それは弱点になります。</p>
+    <p><span class="pause">〈ゆっくり〉</span><br>
+    だから、これは<strong>足し算で作ったアプリじゃありません。引き算で作ったアプリ</strong>です。</p>
+  </div>
+  <div class="why">
+    <b>狙い：</b>「3〜4時間」は隠すと後で不利。先に堂々と出し、<b>「5ヶ月目の3時間」</b>の一語で意味を反転させる。ここは説明を足さない。<br>
+    <b>核：</b>やめた機能を3つ具体的に挙げるのは<b>「思いつかなかったのではなく、選んで捨てた」</b>ことの証明。締めで本編の制約の話に戻る。
+  </div>
+</section>
+
+<details>
+  <summary>質疑に臨む姿勢・3つだけ</summary>
+  <ul>
+    <li><strong>知らないことは「わかりません」と言う。</strong>この5問以外が来たら、取り繕わない。取り繕った瞬間、本編の誠実さが全部消える</li>
+    <li><strong>質問は、まず一度受け止める。</strong>「いい質問です」「そこ、私も迷いました」。反射で反論しない</li>
+    <li><strong>答えは短く終える。</strong>不安になると足したくなるが、足すほど弱くなる。言い切って、黙る</li>
+  </ul>
+</details>
+
+</div>
+
+<script>
+  const fsSteps=['17px','19px','21px','24px']; let fi=+(localStorage.getItem('qa_fs')||1);
+  const applyFs=()=>document.documentElement.style.setProperty('--fs',fsSteps[fi]);
+  applyFs();
+  document.getElementById('fs').onclick=()=>{fi=(fi+1)%fsSteps.length;localStorage.setItem('qa_fs',fi);applyFs()};
+  if(localStorage.getItem('qa_th')==='light') document.body.classList.add('light');
+  document.getElementById('th').onclick=()=>{
+    document.body.classList.toggle('light');
+    localStorage.setItem('qa_th', document.body.classList.contains('light')?'light':'dark');
+  };
+  if('wakeLock' in navigator){ const req=()=>navigator.wakeLock.request('screen').catch(()=>{});
+    req(); document.addEventListener('visibilitychange',()=>{if(!document.hidden)req()}); }
+</script>
+</body>
+</html>
