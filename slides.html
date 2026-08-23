@@ -73,6 +73,21 @@
     max-height:452px; max-width:490px; border:1px solid #dfe5ee}
   .shot figcaption{font-size:22px; font-weight:700; color:#5b6779}
   .shot .ar2{font-size:48px; color:var(--dim); align-self:center; margin-bottom:34px}
+
+  /* 全体像＋拡大 */
+  .duo{display:flex; gap:44px; align-items:center; justify-content:center; margin-top:10px}
+  .duo .phone img{max-height:470px; border-radius:16px;
+    box-shadow:0 16px 44px rgba(10,20,40,.24)}
+  .duo .zoom{flex:1; max-width:660px}
+  .duo .zoom img{width:100%; border-radius:12px; border:1px solid #dfe5ee;
+    box-shadow:0 14px 40px rgba(10,20,40,.18)}
+  .duo .zoom img + img{margin-top:18px}
+  .duo .cap{font-size:24px; font-weight:700; color:#5b6779; margin-top:16px; line-height:1.6}
+  .dark .duo .cap{color:#9fb0cc}
+  .step{display:inline-block; background:var(--acc); color:#fff; font-size:17px;
+    font-weight:800; letter-spacing:.12em; padding:6px 16px; border-radius:999px;
+    margin-bottom:18px}
+  .center{align-items:center; text-align:center}
   .full{display:flex; justify-content:center; margin-top:24px}
   .full img{max-height:440px; border-radius:12px; box-shadow:0 18px 48px rgba(10,20,40,.25)}
 
@@ -213,64 +228,97 @@
   <div class="pg">11</div>
 </section>
 
-<!-- 12 ── ⑥しくみ -->
-<section class="slide">
-  <div class="lbl">会社が唯一、許してくれた通り道を使う</div>
-  <h3>データをまるごとURLに埋めて、<em>メール</em>で自分に送る</h3>
-  <div class="flow">
-    <div class="st"><div class="n">STEP 1</div><div class="t">降りた場で<br>メーターを打つ</div></div>
-    <div class="ar">→</div>
-    <div class="st"><div class="n">STEP 2</div><div class="t">週末に<br>レポートが完成</div></div>
-    <div class="ar">→</div>
-    <div class="st"><div class="n">STEP 3</div><div class="t">メールで<br>自分のPCへ</div></div>
-    <div class="ar">→</div>
-    <div class="st"><div class="n">STEP 4</div><div class="t">開いて<br>見て、写す</div></div>
+<!-- 12 ── 使い方① ホーム画面 -->
+<section class="slide center">
+  <div class="step">STEP 1</div>
+  <h3>ホーム画面から、普通のアプリのように開く</h3>
+  <div class="duo" style="margin-top:22px">
+    <div class="phone"><img src="./shots/shot_home.png" alt="ホーム画面のアイコン"></div>
+    <div class="zoom" style="max-width:520px; text-align:left">
+      <div class="cap" style="font-size:30px; margin-top:0">
+        インストールは、要りません。<br>
+        ただのWebページを、<br>ホーム画面に置いているだけ。<br><br>
+        <span style="color:#2f6fe4">サーバーなし。<br>データベースなし。<br>運用コストは、0円。</span>
+      </div>
+    </div>
   </div>
-  <div class="sub">サーバーなし・データベースなし・インストールなし。運用コストは0円。</div>
   <div class="pg">12</div>
 </section>
 
-<!-- 13 ── 画面 -->
+<!-- 13 ── 使い方② 入力 -->
 <section class="slide">
-  <div class="lbl">入力は増やさない。出力だけ、完成版に近づける</div>
-  <div class="shot">
-    <figure>
-      <img src="./shots/shot_week_list.png" alt="スマホでの入力画面">
-      <figcaption>打つのは、メーターの数字だけ</figcaption>
-    </figure>
-    <div class="ar2">→</div>
-    <figure>
-      <img src="./shots/shot_report_table.png" alt="週次レポート">
-      <figcaption>週末には、伝票の形になっている</figcaption>
-    </figure>
+  <div class="step">STEP 2</div>
+  <h3>車を降りた、その場で。メーターの数字を打つ</h3>
+  <div class="duo">
+    <div class="phone"><img src="./shots/shot_week.png" alt="週の一覧画面"></div>
+    <div class="zoom">
+      <img src="./shots/shot_week_list.png" alt="日付ごとのメーター記録">
+      <div class="cap">打つのは、数字だけ。<em style="color:#2f6fe4">10秒</em>で終わる。</div>
+    </div>
   </div>
   <div class="pg">13</div>
 </section>
 
-<!-- 14 ── ⑦誠実さ -->
+<!-- 14 ── 使い方③ 週末ボタン -->
 <section class="slide">
-  <div class="lbl">効果について、正直に</div>
-  <h2>実際に測れているのは、<br><em>私ひとり分</em>です。</h2>
-  <div class="sub">営業400人で計算すれば、大きな数字は作れます。<br>
-    でも今日は、そこを主役にしませんでした。</div>
+  <div class="step">STEP 3</div>
+  <h3>週末、ボタンをひとつ押して、自分あてに送る</h3>
+  <div class="duo" style="flex-direction:column; gap:26px; margin-top:34px">
+    <div class="zoom" style="max-width:820px">
+      <img src="./shots/shot_week_btn.png" alt="今週のレポートを作る">
+      <img src="./shots/shot_report_mail.png" alt="メールで送る・印刷">
+    </div>
+    <div class="cap" style="text-align:center; margin-top:0">
+      レポートを<em style="color:#2f6fe4">まるごとURLに埋め込んで</em>、メールで送る。<br>
+      添付ファイルは、使いません。
+    </div>
+  </div>
   <div class="pg">14</div>
 </section>
 
-<!-- 15 ── ⑦B -->
-<section class="slide dark">
-  <h2>無理なのは会社じゃなくて、<br><em>そこで止まった思考</em>かもしれません。</h2>
-  <div class="sub" style="font-size:30px">8月7日の私が、まさにそうでした。</div>
+<!-- 15 ── 使い方④ 会社PCで開く -->
+<section class="slide">
+  <div class="step">STEP 4</div>
+  <h3>会社のパソコンで、リンクを開く</h3>
+  <div class="duo">
+    <div class="phone"><img src="./shots/shot_report.png" alt="週次レポート全体"></div>
+    <div class="zoom">
+      <img src="./shots/shot_report_table.png" alt="週次レポートの表">
+      <div class="cap">合計も、走行距離も、計算済み。<br>あとは、<em style="color:#2f6fe4">見て、写すだけ。</em></div>
+    </div>
+  </div>
   <div class="pg">15</div>
 </section>
 
-<!-- 16 ── ⑦D -->
-<section class="slide dark">
-  <h2>皆さんは、たぶん気づかないうちに、<br><em>誰かの何かを変えています。</em></h2>
-  <div class="sub" style="font-size:30px">私を変えたのは、私に向けられた言葉ではありませんでした。</div>
+<!-- 16 ── ⑦効果 -->
+<section class="slide">
+  <div class="lbl">効果について、正直に</div>
+  <div class="num">
+    <span class="b strike">10</span><span class="s">分</span>
+    <span class="s" style="font-size:64px">→</span>
+    <span class="b blue">3</span><span class="s">分</span>
+  </div>
+  <h3 style="margin-top:26px">ただしこれは、<em>今のところ私ひとりの実測</em>です。</h3>
+  <div class="sub" style="margin-top:22px">営業400人で計算すれば、大きな数字は作れます。<br>
+    でも今日は、そこを主役にしませんでした。</div>
   <div class="pg">16</div>
 </section>
 
-<!-- 17 ── 締め -->
+<!-- 17 ── ⑦B -->
+<section class="slide dark">
+  <h2>無理なのは会社じゃなくて、<br><em>そこで止まった思考</em>かもしれません。</h2>
+  <div class="sub" style="font-size:30px">8月7日の私が、まさにそうでした。</div>
+  <div class="pg">17</div>
+</section>
+
+<!-- 18 ── ⑦D -->
+<section class="slide dark">
+  <h2>皆さんは、たぶん気づかないうちに、<br><em>誰かの何かを変えています。</em></h2>
+  <div class="sub" style="font-size:30px">私を変えたのは、私に向けられた言葉ではありませんでした。</div>
+  <div class="pg">18</div>
+</section>
+
+<!-- 19 ── 締め -->
 <section class="slide dark">
   <div class="msg">
     作ったのは、アプリではありませんでした。<br>
@@ -278,7 +326,7 @@
     そしてその仕組みは、誰かに渡せます。
   </div>
   <div class="sub" style="margin-top:52px; font-size:24px">ありがとうございました。</div>
-  <div class="pg">17</div>
+  <div class="pg">19</div>
 </section>
 
 </div>
