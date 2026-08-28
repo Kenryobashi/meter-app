@@ -121,6 +121,22 @@
     padding:11px 16px; font-size:11.5px; color:#475569; line-height:1.7; border-radius:0 8px 8px 0; }
   .pivot-quote b { color:#1f2937; }
 
+  /* 場面／きっかけ の帯 */
+  .scene { display:flex; gap:14px; align-items:stretch; margin-bottom:14px;
+    background:#fffbeb; border:1px solid #fcd34d; border-radius:12px; padding:13px 16px; }
+  .scene .sc-ic { font-size:26px; line-height:1.2; flex:0 0 auto; }
+  .scene .sc-body { flex:1; }
+  .scene .sc-label { font-size:10px; font-weight:800; color:#b45309;
+    letter-spacing:.06em; margin-bottom:5px; }
+  .scene .sc-text { font-size:12.5px; font-weight:700; color:#374151; line-height:1.75; }
+  .scene .sc-text em { font-style:normal; color:#b45309; }
+  .scene .sc-punch { display:inline-block; margin-top:6px; background:#b45309; color:#fff;
+    font-size:12px; font-weight:800; padding:3px 11px; border-radius:999px; letter-spacing:.02em; }
+  .scene-red { background:#fef2f2; border-color:#fecaca; }
+  .scene-red .sc-label { color:#dc2626; }
+  .scene-red .sc-text em { color:#dc2626; }
+  .scene-red .sc-punch { background:#dc2626; }
+
   /* Before/After compact */
   .ba-wrap { display:grid; grid-template-columns:1fr 40px 1fr; align-items:stretch; }
   .ba-card { border-radius:12px; padding:14px 16px; }
@@ -361,6 +377,17 @@
   <!-- ② 課題 -->
   <div class="section">
     <div class="section-head"><div class="section-num">2</div><h2>解決する課題</h2></div>
+    <div class="scene">
+      <div class="sc-ic">🚶</div>
+      <div class="sc-body">
+        <div class="sc-label">どんな場面の面倒か</div>
+        <div class="sc-text">
+          月末。伝票を書こうとして、手が止まる。——<em>降りたときのメーターを、控えていなかった。</em><br>
+          席を立ち、駐車場まで歩いて、車のメーターを見に行く。
+          <span class="sc-punch">往復5分。数字ひとつのために。</span>
+        </div>
+      </div>
+    </div>
     <div class="problem-flow">
       <div class="pf-step">思い出す</div><div class="pf-arrow">→</div>
       <div class="pf-step">計算する</div><div class="pf-arrow">→</div>
@@ -393,6 +420,17 @@
   <!-- ③ 理由 -->
   <div class="section">
     <div class="section-head"><div class="section-num">3</div><h2>作りたいと思った理由</h2></div>
+    <div class="scene scene-red">
+      <div class="sc-ic">📚</div>
+      <div class="sc-body">
+        <div class="sc-label">お題を選んだ、きっかけ</div>
+        <div class="sc-text">
+          一年でいちばん忙しい年度末。<em>部下3人から、1ヶ月分たまった伝票が、それぞれ出てきた。</em><br>
+          自分の段取りが悪いだけだと思っていた。そうではなかった。
+          <span class="sc-punch">同じことが、私の周りでも起きていた。</span>
+        </div>
+      </div>
+    </div>
     <div class="why-mini">
       <div class="why-mini-card"><div class="wm-ic">😩</div><div class="wm-text">自分自身が毎週の面倒に直面していた</div></div>
       <div class="why-mini-card"><div class="wm-ic">🔒</div><div class="wm-text">会社PCに手を加えられない制約 → スマホ完結で解決</div></div>
