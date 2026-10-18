@@ -60,6 +60,8 @@
 
 - アプリ：https://kenryobashi.github.io/meter-app/
 - 図解：https://meterlog-zukai.surge.sh
-- 編集は必ず `index.html` → `cp index.html meter-log.html` → `sw.js` の CACHE_NAME をバンプ
+- アプリの実体は **`index.html` の1ファイルだけ**（manifest の start_url）。
+  編集したら `sw.js` の CACHE_NAME をバンプする。
+  `meter-log.html` は旧URL用のリダイレクトのみ（複製しない／編集しない）
 - 図解のデプロイ：`/tmp/zukai-deploy` に `zukai.html`→`index.html` と `shots/` を置き
   `npx surge --project . --domain meterlog-zukai.surge.sh`

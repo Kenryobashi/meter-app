@@ -1,4 +1,4 @@
-const CACHE_NAME = 'meter-log-v12';
+const CACHE_NAME = 'meter-log-v13';
 const ASSETS = [
   './manifest.json',
   './icons/icon-192.png',
